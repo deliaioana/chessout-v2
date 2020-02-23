@@ -19,7 +19,7 @@ To authenticate you have to setup an environment variable "GOOGLE_APPLICATION_CR
 
 In my case
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS="/home/bogdan/workspace/multi-project/backend/firebase-chessout-v2.json"
+export GOOGLE_APPLICATION_CREDENTIALS="/home/bogdan/workspace/chessout-v2/backend/firebase-chessout-v2.json"
 ```
 e
 
