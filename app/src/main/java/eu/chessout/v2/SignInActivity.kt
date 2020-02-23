@@ -11,10 +11,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
+import eu.chessout.shared.Constants
+import eu.chessout.shared.model.Device
+import eu.chessout.shared.model.User
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import java.util.*
 
 private val TAG = "MainActivity"
 
@@ -103,6 +110,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     updateUI(user)
+                    setUserInFirebaseHelper()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -116,6 +124,63 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             }
     }
     // [END auth_with_google]
+
+    private fun setUserInFirebaseHelper() {
+        val app = FirebaseApp.getInstance()
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val auth = FirebaseAuth.getInstance()
+        val firebaseUser = auth.currentUser
+        val username = firebaseUser!!.displayName
+        val email = firebaseUser.email
+        val uid = firebaseUser.uid
+
+        val userLocation: DatabaseReference = database.getReference(Constants.USERS).child(uid)
+
+        userLocation.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) { //only set value if user does not exist
+                if (dataSnapshot.getValue() == null) {
+                    val timeStampJoined =
+                        HashMap<String, Any>()
+                    timeStampJoined[Constants.FIREBASE_PROPERTY_TIMESTAMP] = ServerValue.TIMESTAMP
+                    val user = User(username, email)
+                    userLocation.setValue(user)
+                }
+                registerDeviceInFirebase()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(
+                    TAG,
+                    "DatabaseError: " + databaseError.getMessage()
+                )
+            }
+        })
+    }
+
+    @Suppress("DEPRECATION")
+    private fun registerDeviceInFirebase() {
+        val userKey = FirebaseAuth.getInstance().currentUser!!.uid
+        val deviceKey: String = FirebaseInstanceId.getInstance().token!!
+        val deviceLoc: String = Constants.LOCATION_MY_DEVICE
+            .replace(Constants.USER_KEY, userKey)
+            .replace(Constants.DEVICE_KEY, deviceKey)
+        val deviceRef = FirebaseDatabase.getInstance().getReference(deviceLoc)
+        deviceRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) { //only set value if value device not registered yet
+                if (dataSnapshot.value == null) {
+                    val device = Device(deviceKey, Device.DeviceType.ANDROID)
+                    deviceRef.setValue(device)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(
+                    TAG,
+                    "DatabaseError: " + databaseError.message
+                )
+            }
+        })
+    }
 
 
     private fun updateUI(user: FirebaseUser?) {

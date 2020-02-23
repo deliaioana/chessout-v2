@@ -62,6 +62,7 @@ public class HelloController {
         data.put("first", "Ada");
         data.put("last", "Lovelace");
         data.put("born", 1815);
+        data.put("altTimeStamp", (new Date().getTime()));
 
         //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
