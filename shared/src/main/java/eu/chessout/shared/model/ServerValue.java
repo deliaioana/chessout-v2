@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Copied class from firebase decompiled class to add timestamp to data items in firebase
+ */
 public class ServerValue {
     public static final Map<String, String> TIMESTAMP = createServerValuePlaceholder("timestamp");
 

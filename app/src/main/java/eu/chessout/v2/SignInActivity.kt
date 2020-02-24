@@ -21,7 +21,6 @@ import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Device
 import eu.chessout.shared.model.User
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import java.util.*
 
 private val TAG = "MainActivity"
 
@@ -111,6 +110,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
                     val user = auth.currentUser
                     updateUI(user)
                     setUserInFirebaseHelper()
+                    startActivity(Intent(this, MainActivity::class.java))
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
