@@ -37,3 +37,6 @@ sudo kill -9 `sudo lsof -t -i:8080`
 firebase emulators:start --only firestore
 
 ```
+
+## android inspiration
+- [kotlin grid view tutorial](https://www.youtube.com/watch?v=sODa2KgfiNo)
