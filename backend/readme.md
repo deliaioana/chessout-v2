@@ -40,3 +40,4 @@ firebase emulators:start --only firestore
 
 ## android inspiration
 - [kotlin grid view tutorial](https://www.youtube.com/watch?v=sODa2KgfiNo)
+- [firebase view model](https://medium.com/@lgvalle/firebase-viewmodels-livedata-cb64c5ee4f95)
