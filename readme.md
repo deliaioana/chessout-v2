@@ -41,3 +41,7 @@ firebase emulators:start --only firestore
 ## android inspiration
 - [kotlin grid view tutorial](https://www.youtube.com/watch?v=sODa2KgfiNo)
 - [firebase view model](https://medium.com/@lgvalle/firebase-viewmodels-livedata-cb64c5ee4f95)
+- java architecture components tutorial
+  - [ part 1](https://www.youtube.com/watch?v=ARpn-1FPNE4)
+  - [ part 2](https://www.youtube.com/watch?v=Jwdty9jQN0E)
+  - [ part 3](https://www.youtube.com/watch?v=0cg09tlAAQ0)
