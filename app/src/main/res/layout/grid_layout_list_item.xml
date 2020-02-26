@@ -15,7 +15,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/icons_image"
+            android:id="@+id/icon_image"
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:layout_marginLeft="8dp"
@@ -23,9 +23,10 @@
             android:src="@drawable/ic_dashboard_black_24dp" />
 
         <TextView
+            android:id="@+id/icon_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/icons_image"
+            android:layout_below="@id/icon_image"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:text="Title"
