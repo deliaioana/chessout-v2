@@ -45,3 +45,6 @@ firebase emulators:start --only firestore
   - [ part 1](https://www.youtube.com/watch?v=ARpn-1FPNE4)
   - [ part 2](https://www.youtube.com/watch?v=Jwdty9jQN0E)
   - [ part 3](https://www.youtube.com/watch?v=0cg09tlAAQ0)
+
+- google article [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/)
+
