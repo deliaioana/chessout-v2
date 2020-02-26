@@ -33,8 +33,15 @@ class DashboardAdapter(
         holder.textView.text = dashboardModel.iconString
 
         holder.textView.setOnClickListener {
-            Toast.makeText(context, dashboardModel.iconString, Toast.LENGTH_LONG).show()
+            performAction(dashboardModel.iconString)
         }
+        holder.imageView.setOnClickListener {
+            performAction(dashboardModel.iconString)
+        }
+    }
+
+    fun performAction(iconString: String?) {
+        Toast.makeText(context, iconString, Toast.LENGTH_LONG).show()
     }
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
