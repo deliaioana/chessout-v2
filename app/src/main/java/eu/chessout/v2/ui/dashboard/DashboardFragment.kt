@@ -8,22 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.v2.R
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
-
-    private lateinit var dashboardViewModel: DashboardViewModel
-
-    private var recyclerView: RecyclerView? = null
-    private var gridLayoutManager: GridLayoutManager? = null
-    private var arrayList: ArrayList<DashboardModel>? = null
-    private var dashboardAdapter: DashboardAdapter? = null
 
     private lateinit var myViewModel: MyViewModel
     private val myListAdapter = MyAdapter(arrayListOf())
 
-    private val myObserver = Observer<List<DashboardModel>> { list -> }
+    private val myObserver = Observer<List<DashboardModel>> { list ->
+        list?.let {
+            my_recycler_view.visibility = View.VISIBLE
+            myListAdapter.updateArrayList(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +39,9 @@ class DashboardFragment : Fragment() {
         myViewModel.dashboardModelList.observe(this, myObserver)
         myViewModel.getInitialList()
 
-        //recyclerView =
+        my_recycler_view?.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = myListAdapter
+        }
     }
 }

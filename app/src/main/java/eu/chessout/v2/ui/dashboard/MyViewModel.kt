@@ -9,6 +9,10 @@ class MyViewModel() : ViewModel() {
 
     val dashboardModelList = MutableLiveData<List<DashboardModel>>()
 
+    fun refresh() {
+        getInitialList()
+    }
+
     fun getInitialList() {
         var items: ArrayList<DashboardModel> = ArrayList()
         items.add(DashboardModel(R.drawable.chess_king_v1, "King"))
