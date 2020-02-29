@@ -7,13 +7,9 @@ import eu.chessout.v2.R
 class MyViewModel() : ViewModel() {
 
 
-    private val dashboardModelList: MutableLiveData<List<DashboardModel>> by lazy {
-        MutableLiveData<List<DashboardModel>>().also {
-            getInitialList()
-        }
-    }
+    val dashboardModelList = MutableLiveData<List<DashboardModel>>()
 
-    private fun getInitialList(): MutableLiveData<List<DashboardModel>> {
+    fun getInitialList() {
         var items: ArrayList<DashboardModel> = ArrayList()
         items.add(DashboardModel(R.drawable.chess_king_v1, "King"))
         items.add(DashboardModel(R.drawable.chess_queen_v1, "Queen"))
@@ -23,9 +19,7 @@ class MyViewModel() : ViewModel() {
         items.add(DashboardModel(R.drawable.chess_pawn_v1, "Pawn"))
         items.add(DashboardModel(R.drawable.chess_king_and_rook_v1, "King and rook"))
 
-        return MutableLiveData<List<DashboardModel>>().apply {
-            value = items
-        }
+        dashboardModelList.value = items
     }
 
 }
