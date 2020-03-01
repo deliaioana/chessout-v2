@@ -37,6 +37,8 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(R.layout.activity_sign_in)
 
 
@@ -61,6 +63,10 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         // [END initialize_auth]
 
 
+        var logOut = savedInstanceState?.getBoolean("logOut")
+        logOut?.let {
+            signOut()
+        }
     }
 
     // [START on_start_check_user]

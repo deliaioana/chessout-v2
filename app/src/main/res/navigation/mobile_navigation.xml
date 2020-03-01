@@ -15,11 +15,22 @@
         android:id="@+id/navigation_dashboard"
         android:name="eu.chessout.v2.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/actionSignIn"
+            app:destination="@id/signInActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="eu.chessout.v2.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <activity
+        android:id="@+id/signInActivity"
+        android:name="eu.chessout.v2.SignInActivity"
+        android:label="activity_sign_in"
+        tools:layout="@layout/activity_sign_in">
+
+    </activity>
 </navigation>

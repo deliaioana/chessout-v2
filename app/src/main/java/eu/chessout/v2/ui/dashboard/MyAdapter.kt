@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.v2.R
 
 private const val TAG = "myDebugTag"
+
 class MyAdapter(
     var arrayList: ArrayList<DashboardModel>
 ) : RecyclerView.Adapter<MyAdapter.ItemHolder>() {
@@ -49,7 +52,8 @@ class MyAdapter(
     private fun performAction(iconKey: Int?, view: View) {
         Log.d(TAG, "Selected: $iconKey")
         if (iconKey == R.drawable.ic_user_circle_solid) {
-
+            var argsBundle = bundleOf("logOut" to true)
+            view.findNavController().navigate(R.id.actionSignIn, argsBundle)
         }
 
     }
