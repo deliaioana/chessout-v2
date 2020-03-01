@@ -15,13 +15,15 @@ class MyViewModel() : ViewModel() {
 
     fun getInitialList() {
         var items: ArrayList<DashboardModel> = ArrayList()
-        items.add(DashboardModel(R.drawable.chess_king_v1, "King"))
+        /*items.add(DashboardModel(R.drawable.chess_king_v1, "King"))
         items.add(DashboardModel(R.drawable.chess_queen_v1, "Queen"))
         items.add(DashboardModel(R.drawable.chess_bishop_v1, "Bishop"))
         items.add(DashboardModel(R.drawable.chess_knight_v1, "Knight"))
         items.add(DashboardModel(R.drawable.chess_rook_v1, "Rook"))
         items.add(DashboardModel(R.drawable.chess_pawn_v1, "Pawn"))
         items.add(DashboardModel(R.drawable.chess_king_and_rook_v1, "King and rook"))
+*/
+        items.add(DashboardModel(R.drawable.ic_user_circle_solid, "Account"))
 
         dashboardModelList.value = items
     }
