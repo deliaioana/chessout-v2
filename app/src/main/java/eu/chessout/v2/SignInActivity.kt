@@ -77,6 +77,13 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         Log.d(TAG, "onStart -> $currentUser")
+
+        var timeToLogOut = this.intent.extras?.getBoolean("timeToLogOut")
+        timeToLogOut?.let {
+            if (timeToLogOut) {
+                signOut()
+            }
+        }
     }
     // [END on_start_check_user]
 
@@ -240,7 +247,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     companion object {
-        private const val TAG = "GoogleActivity"
+        private const val TAG = "myDebugTag"
         private const val RC_SIGN_IN = 9001
     }
 }
