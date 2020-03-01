@@ -1,5 +1,6 @@
 package eu.chessout.v2.ui.dashboard
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.v2.R
 
+private const val TAG = "myDebugTag"
 class MyAdapter(
     var arrayList: ArrayList<DashboardModel>
 ) : RecyclerView.Adapter<MyAdapter.ItemHolder>() {
+
 
     fun updateArrayList(newArrayList: List<DashboardModel>) {
         arrayList.clear()
@@ -36,15 +39,19 @@ class MyAdapter(
         holder.textView.text = dashboardModel.iconString
 
         holder.textView.setOnClickListener {
-            performAction(dashboardModel.iconString)
+            performAction(dashboardModel.iconsChar, it)
         }
         holder.imageView.setOnClickListener {
-            performAction(dashboardModel.iconString)
+            performAction(dashboardModel.iconsChar, it)
         }
     }
 
-    fun performAction(iconString: String?) {
-        // Toast.makeText(context, iconString, Toast.LENGTH_LONG).show()
+    private fun performAction(iconKey: Int?, view: View) {
+        Log.d(TAG, "Selected: $iconKey")
+        if (iconKey == R.drawable.ic_user_circle_solid) {
+
+        }
+
     }
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
