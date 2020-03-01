@@ -52,7 +52,7 @@ class MyAdapter(
     private fun performAction(iconKey: Int?, view: View) {
         Log.d(TAG, "Selected: $iconKey")
         if (iconKey == R.drawable.ic_user_circle_solid) {
-            var argsBundle = bundleOf("logOut" to true)
+            var argsBundle = bundleOf("timeToLogOut" to true)
             view.findNavController().navigate(R.id.actionSignIn, argsBundle)
         }
 

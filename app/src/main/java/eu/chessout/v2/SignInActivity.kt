@@ -35,6 +35,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,11 +64,12 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         // [END initialize_auth]
 
 
-        var logOut = savedInstanceState?.getBoolean("logOut")
-        logOut?.let {
+        var timeToLogOut = savedInstanceState?.getBoolean("timeToLogOut")
+        timeToLogOut?.let {
             signOut()
         }
     }
+
 
     // [START on_start_check_user]
     public override fun onStart() {
