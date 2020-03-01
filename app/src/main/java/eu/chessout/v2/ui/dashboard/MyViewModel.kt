@@ -23,7 +23,7 @@ class MyViewModel() : ViewModel() {
         items.add(DashboardModel(R.drawable.chess_pawn_v1, "Pawn"))
         items.add(DashboardModel(R.drawable.chess_king_and_rook_v1, "King and rook"))
 */
-        items.add(DashboardModel(R.drawable.ic_user_circle_solid, "Account"))
+        items.add(DashboardModel(R.drawable.ic_sign_out_alt_solid, "Sign out"))
 
         dashboardModelList.value = items
     }
