@@ -176,6 +176,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private fun registerDeviceInFirebase() {
         val userKey = FirebaseAuth.getInstance().currentUser!!.uid
         val deviceKey: String = FirebaseInstanceId.getInstance().token!!
+        Log.d(Constants.LOG_TAG, "Device token = $deviceKey")
         val deviceLoc: String = Constants.LOCATION_MY_DEVICE
             .replace(Constants.USER_KEY, userKey)
             .replace(Constants.DEVICE_KEY, deviceKey)
