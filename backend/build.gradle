@@ -58,6 +58,9 @@ dependencies {
     compile 'com.google.cloud:google-cloud-firestore:1.32.0'
     // https://mvnrepository.com/artifact/javax.inject/javax.inject
     compile group: 'javax.inject', name: 'javax.inject', version: '1'
+    // https://mvnrepository.com/artifact/com.google.appengine/appengine-api-1.0-sdk
+    compile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.78'
+
 
 
 }
@@ -85,6 +88,11 @@ appengine {
         promote = true              // default - & make this the current version
         projectId = 'chess-out-v2'
         version = 'v0-00-00'
+    }
+
+    run {
+        //If you plan to debug uncomment the jvmFlag.
+        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
     }
 
 }
