@@ -9,7 +9,13 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import eu.chessout.shared.dao.BasicApiResponse
+import eu.chessout.shared.model.MyPayLoad
 import eu.chessout.v2.R
+import eu.chessout.v2.model.BasicApiService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 private const val TAG = "myDebugTag"
 
@@ -17,6 +23,7 @@ class MyAdapter(
     var arrayList: ArrayList<DashboardModel>
 ) : RecyclerView.Adapter<MyAdapter.ItemHolder>() {
 
+    lateinit var dashboardModel: DashboardModel
 
     fun updateArrayList(newArrayList: List<DashboardModel>) {
         arrayList.clear()
@@ -50,10 +57,29 @@ class MyAdapter(
     }
 
     private fun performAction(iconKey: Int?, view: View) {
-        Log.d(TAG, "Selected: $iconKey")
         if (iconKey == R.drawable.ic_sign_out_alt_solid) {
             var argsBundle = bundleOf("timeToLogOut" to true)
             view.findNavController().navigate(R.id.actionSignIn, argsBundle)
+        } else if (iconKey == R.drawable.ic_paper_plane_regular) {
+
+            val myPayLoad = MyPayLoad()
+            myPayLoad.authToken = "androidToken"
+            myPayLoad.event = MyPayLoad.Event.GAME_RESULT_UPDATED
+            myPayLoad.gameLocation = "android game location"
+            myPayLoad.tournamentLocation = "android tournament location"
+
+            BasicApiService().gameResultUpdated(myPayLoad)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<BasicApiResponse>() {
+                    override fun onSuccess(value: BasicApiResponse?) {
+                        Log.d(TAG, "Success${value?.message}")
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        Log.e(TAG, "Error ${e?.message}")
+                    }
+                })
         }
 
     }

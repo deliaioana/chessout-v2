@@ -2,12 +2,16 @@ package eu.chessout.v2.ui.dashboard
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import eu.chessout.shared.Constants
 import eu.chessout.v2.R
+import eu.chessout.v2.model.BasicApiService
 
 class MyViewModel() : ViewModel() {
 
-
+    val TAG = Constants.LOG_TAG;
     val dashboardModelList = MutableLiveData<List<DashboardModel>>()
+
+    private val api = BasicApiService()
 
     fun refresh() {
         getInitialList()
@@ -24,8 +28,10 @@ class MyViewModel() : ViewModel() {
         items.add(DashboardModel(R.drawable.chess_king_and_rook_v1, "King and rook"))
 */
         items.add(DashboardModel(R.drawable.ic_sign_out_alt_solid, "Sign out"))
+        items.add(DashboardModel(R.drawable.ic_paper_plane_regular, "Ping backend"))
 
         dashboardModelList.value = items
     }
+
 
 }

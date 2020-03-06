@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class BasicApiService {
 
-    private val baseUrl = "my-base-url"
+    private val baseUrl = "https://chess-out-v2.appspot.com/"
 
     private val api = Retrofit.Builder()
         .baseUrl(baseUrl)

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.chessout.shared.dao.BasicApiResponse;
 import eu.chessout.shared.model.MyPayLoad;
 
 // useful documentation: https://www.baeldung.com/spring-boot-json
@@ -19,14 +20,18 @@ import eu.chessout.shared.model.MyPayLoad;
 public class BasicApiController {
 
     @PutMapping("/api/gameResultUpdated")
-    public String gameResultUpdated(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException {
+    public BasicApiResponse gameResultUpdated(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String stringPlayLoad = objectMapper.writeValueAsString(myPayLoad);
 
         Queue queue = QueueFactory.getDefaultQueue();
         queue.add(TaskOptions.Builder.withUrl("/api/gameResultUpdatedTask").payload(stringPlayLoad));
         System.out.println("Hello gameResultUpdated");
-        return "Greetings from gameResultUpdated";
+
+        BasicApiResponse basicApiResponse = new BasicApiResponse();
+        basicApiResponse.isSuccessful = true;
+        basicApiResponse.message = stringPlayLoad;
+        return basicApiResponse;
     }
 
     @PostMapping(

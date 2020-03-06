@@ -4,10 +4,10 @@ import eu.chessout.shared.dao.BasicApiResponse
 import eu.chessout.shared.model.MyPayLoad
 import io.reactivex.Single
 import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface BasicApi {
 
-    @POST("api/gameResultUpdated")
+    @PUT("api/gameResultUpdated")
     fun gameResultUpdated(@Body myPayLoad: MyPayLoad): Single<BasicApiResponse>
 }
