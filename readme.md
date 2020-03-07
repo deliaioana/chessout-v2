@@ -38,6 +38,9 @@ firebase emulators:start --only firestore
 
 ```
 
+# add firebase to server
+- [docs add firebase to server](https://firebase.google.com/docs/admin/setup)
+
 ## android inspiration
 - [kotlin grid view tutorial](https://www.youtube.com/watch?v=sODa2KgfiNo)
 - [firebase view model](https://medium.com/@lgvalle/firebase-viewmodels-livedata-cb64c5ee4f95)

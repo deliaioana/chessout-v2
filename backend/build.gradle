@@ -62,6 +62,10 @@ dependencies {
     compile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.78'
 
 
+    // https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+    compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.12.2'
+
+
 
 }
 
