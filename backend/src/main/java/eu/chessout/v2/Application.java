@@ -50,7 +50,7 @@ public class Application {
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://my-project-id.firebaseio.com")
+                .setDatabaseUrl("https://fake-project-id.firebaseio.com")
                 .build();
 
         FirebaseApp.initializeApp(options);

@@ -9,6 +9,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -87,23 +88,26 @@ public class HelloController {
     public BasicApiResponse sendNotificationToDevice(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException, FirebaseMessagingException {
 
         String registrationToken = myPayLoad.getGameLocation();
+        Notification notification = Notification.builder().setTitle("My backend notification")
+                .setBody("Hello from backend body notification").build();
 
         Message message = Message.builder()
+                .setNotification(notification)
+                .putData("title", "My title")
+                .putData("body", "My body")
                 .putData("hello", "Hello from server")
                 .putData("time", "2:45")
                 .setToken(registrationToken)
                 .build();
 
+
         String responseFirebase = FirebaseMessaging.getInstance().send(message);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String stringPlayLoad = objectMapper.writeValueAsString(myPayLoad);
-        BasicApiResponse response = BasicApiResponse.message(responseFirebase + " -> " + stringPlayLoad);
+        BasicApiResponse response = BasicApiResponse.message(
+                responseFirebase + ". token = " + registrationToken);
         return response;
     }
 
-    @GetMapping("/_ah/warmup")
-    public void wormup() {
-
-    }
 }

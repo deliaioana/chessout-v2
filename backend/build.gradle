@@ -96,7 +96,7 @@ appengine {
 
     run {
         //If you plan to debug uncomment the jvmFlag.
-        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
+//        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
     }
 
 }
