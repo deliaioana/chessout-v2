@@ -1,11 +1,15 @@
 package eu.chessout.v2;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +22,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import eu.chessout.shared.dao.BasicApiResponse;
+import eu.chessout.shared.model.MyPayLoad;
 import eu.chessout.v2.model.Book;
 import eu.chessout.v2.service.DataService;
 
@@ -71,5 +77,14 @@ public class HelloController {
         // result.get() blocks on response
         System.out.println("Update time : " + result.get().getUpdateTime());
         return "Update time = " + result.get().getUpdateTime();
+    }
+
+
+    @PutMapping("/sendNotification")
+    public BasicApiResponse sendNotificationToDevice(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String stringPlayLoad = objectMapper.writeValueAsString(myPayLoad);
+        BasicApiResponse response = BasicApiResponse.message(stringPlayLoad);
+        return response;
     }
 }
