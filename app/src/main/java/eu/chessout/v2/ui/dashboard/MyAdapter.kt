@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.dao.BasicApiResponse
 import eu.chessout.shared.model.MyPayLoad
@@ -58,8 +56,8 @@ class MyAdapter(
 
     private fun performAction(iconKey: Int?, view: View) {
         if (iconKey == R.drawable.ic_sign_out_alt_solid) {
-            var argsBundle = bundleOf("timeToLogOut" to true)
-            view.findNavController().navigate(R.id.actionSignIn, argsBundle)
+            /*var argsBundle = bundleOf("timeToLogOut" to true)
+            view.findNavController().navigate(R.id.actionSignIn, argsBundle)*/
         } else if (iconKey == R.drawable.ic_paper_plane_regular) {
 
             val myPayLoad = MyPayLoad()

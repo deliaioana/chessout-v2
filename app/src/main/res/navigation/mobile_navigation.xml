@@ -11,15 +11,15 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="eu.chessout.v2.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard">
-        <action
-            android:id="@+id/actionSignIn"
-            app:destination="@id/signInActivity" />
-    </fragment>
+    <!-- <fragment
+         android:id="@+id/navigation_dashboard"
+         android:name="eu.chessout.v2.ui.dashboard.DashboardFragment"
+         android:label="@string/title_dashboard"
+         tools:layout="@layout/fragment_dashboard">
+         <action
+             android:id="@+id/actionSignIn"
+             app:destination="@id/signInActivity" />
+     </fragment>-->
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -33,4 +33,9 @@
         tools:layout="@layout/activity_sign_in">
 
     </activity>
+    <fragment
+        android:id="@+id/navigation_dashboard02"
+        android:name="eu.chessout.v2.ui.dashboard02.Dashboard02Fragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard02" />
 </navigation>
