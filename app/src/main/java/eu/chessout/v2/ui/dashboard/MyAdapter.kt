@@ -56,8 +56,8 @@ class MyAdapter(
 
     private fun performAction(iconKey: Int?, view: View) {
         if (iconKey == R.drawable.ic_sign_out_alt_solid) {
-            /*var argsBundle = bundleOf("timeToLogOut" to true)
-            view.findNavController().navigate(R.id.actionSignIn, argsBundle)*/
+//            var argsBundle = bundleOf("timeToLogOut" to true)
+//            view.findNavController().navigate(R.id., argsBundle)
         } else if (iconKey == R.drawable.ic_paper_plane_regular) {
 
             val myPayLoad = MyPayLoad()

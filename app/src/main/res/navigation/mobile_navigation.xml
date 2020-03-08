@@ -11,7 +11,7 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-    <!-- <fragment
+    <fragment
          android:id="@+id/navigation_dashboard"
          android:name="eu.chessout.v2.ui.dashboard.DashboardFragment"
          android:label="@string/title_dashboard"
@@ -19,7 +19,7 @@
          <action
              android:id="@+id/actionSignIn"
              app:destination="@id/signInActivity" />
-     </fragment>-->
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
