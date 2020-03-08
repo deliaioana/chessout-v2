@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard02.Dashboard02Fragment">
 
-    <TextView
-        android:id="@+id/text_detail_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="text placeholder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <RelativeLayout
         android:id="@+id/sign_out_card"
@@ -21,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_detail_2">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/icon_image"
@@ -44,18 +36,6 @@
 
 
     </RelativeLayout>
-
-
-    <TextView
-        android:id="@+id/icon_text_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:text="Counter: "
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/sign_out_card"
-        app:layout_constraintTop_toTopOf="@+id/sign_out_card" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
