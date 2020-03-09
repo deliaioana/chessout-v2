@@ -44,6 +44,8 @@ class Dashboard02Fragment : Fragment() {
             Log.d(Constants.LOG_TAG, "Time to create club")
             ClubCreateDialogFragment().show(childFragmentManager, "ClubCreateDialogFragment")
         }
+
+
     }
 
 }
