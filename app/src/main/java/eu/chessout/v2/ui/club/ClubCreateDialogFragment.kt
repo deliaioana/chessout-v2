@@ -1,5 +1,6 @@
 package eu.chessout.v2.ui.club
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,11 +9,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import eu.chessout.v2.R
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Club
 import eu.chessout.shared.model.DefaultClub
 import eu.chessout.shared.model.User
+import eu.chessout.v2.R
 import eu.chessout.v2.util.MyFirebaseUtils
 
 class ClubCreateDialogFragment : DialogFragment() {
@@ -21,13 +22,23 @@ class ClubCreateDialogFragment : DialogFragment() {
     private val myFirebaseUtils = MyFirebaseUtils()
     private lateinit var mView: View
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         super.onCreate(savedInstanceState)
         val builder = AlertDialog.Builder(this!!.activity!!)
         val inflater = this!!.activity!!.layoutInflater
 
         mView = inflater.inflate(R.layout.club_create_dialog, null)
+        builder.setView(mView)
 
+        builder.setNegativeButton("Cancel") { _, _ ->
+            dismiss()
+        }
+
+        builder.setPositiveButton("Create club") { _, _ ->
+            persistClub()
+        }
+        return builder.create()
     }
 
 

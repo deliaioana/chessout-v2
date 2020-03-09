@@ -10,8 +10,8 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/chess_king_and_rook_v1" />
         <TextView
             android:layout_width="match_parent"
