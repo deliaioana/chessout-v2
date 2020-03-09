@@ -34,4 +34,8 @@
         android:name="eu.chessout.v2.ui.dashboard02.Dashboard02Fragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard02" />
+    <fragment
+        android:id="@+id/clubCreateDialogFragment"
+        android:name="eu.chessout.v2.ui.club.ClubCreateDialogFragment"
+        android:label="ClubCreateDialogFragment" />
 </navigation>

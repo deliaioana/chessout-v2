@@ -35,9 +35,13 @@ class Dashboard02Fragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(Dashboard02ViewModel::class.java)
 
         sign_out_card.setOnClickListener {
-            Log.d(Constants.LOG_TAG, "Time to log out")
             var argsBundle = bundleOf("timeToLogOut" to true)
             view?.findNavController()?.navigate(R.id.signInActivity, argsBundle)
+        }
+
+        create_club_card.setOnClickListener {
+            Log.d(Constants.LOG_TAG, "Time to create club")
+            // ClubCreateDialogFragment().show()
         }
     }
 
