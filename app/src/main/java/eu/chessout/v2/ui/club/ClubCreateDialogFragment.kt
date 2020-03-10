@@ -12,7 +12,6 @@ import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Club
 import eu.chessout.shared.model.DefaultClub
-import eu.chessout.shared.model.User
 import eu.chessout.v2.R
 import eu.chessout.v2.util.MyFirebaseUtils
 
@@ -79,25 +78,27 @@ class ClubCreateDialogFragment : DialogFragment() {
         val clubId = clubRef.key
         Log.d(LOG_TAG, "clubId = $clubId")
 
-        //set manager
-        val managersLocation: String = Constants.LOCATION_CLUB_MANAGERS
-            .replace(Constants.CLUB_KEY, clubId!!)
-            .replace(Constants.MANAGER_KEY, uid)
-        val clubManager = User(firebaseUser.displayName, firebaseUser.email)
-        val managersRef =
-            database.getReference(managersLocation)
-        managersRef.setValue(clubManager)
+        myFirebaseUtils.setManager(
+            firebaseUser.displayName!!,
+            firebaseUser.email!!,
+            clubId!!,
+            uid
+        )
 
-        //add to my_clubs club
-        val myClubLocation: String = Constants.LOCATION_MY_CLUB
-            .replace(Constants.USER_KEY, uid)
-            .replace(Constants.CLUB_KEY, clubId)
-        val myClubsRef =
-            database.getReference(myClubLocation)
-        myClubsRef.setValue(club)
+        myFirebaseUtils.addToMyClubs(
+            uid,
+            clubId,
+            club
+        )
 
-        //settings set defaultClub key;
-        val defaultClub = DefaultClub(clubId, club.shortName)
-        myFirebaseUtils.setDefaultClub(defaultClub)
+        myFirebaseUtils.setDefaultClub(
+            DefaultClub(clubId, club.shortName)
+        )
+
+        myFirebaseUtils.setMyClub(
+            DefaultClub(clubId, club.shortName)
+        )
     }
+
+
 }

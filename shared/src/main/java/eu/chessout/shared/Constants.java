@@ -16,6 +16,7 @@ public class Constants {
     public static final String MANAGER_KEY = "$managerKey";
     public static final String USER_SETTINGS = "userSettings";
     public static final String MY_CLUBS = "myClubs";
+    public static final String MY_CLUB = "myClub";
     public static final String MY_DEVICES = "myDevices";
     public static final String DEVICE_KEY = "_deviceKey";
 
@@ -53,8 +54,15 @@ public class Constants {
     public static final String LOCATION_CLUB_MANAGERS = CLUB_MANAGERS + "/" + CLUB_KEY + "/" + MANAGER_KEY;
 
     //userSettings/$userKey/myClubs
-    public static final String LOCATION_MY_CLUBS = USER_SETTINGS + "/" + USER_KEY + "/" + MY_CLUBS;
-    public static final String LOCATION_MY_CLUB = LOCATION_MY_CLUBS + "/" + CLUB_KEY;
+    //public static final String LOCATION_MY_CLUBS = USER_SETTINGS + "/" + USER_KEY + "/" + MY_CLUBS;
+    //userSettings/$userKey/myClubs
+    public static final String LOCATION_MY_CLUBS = USER_SETTINGS + "/" + USER_KEY + "/" + MY_CLUBS + "/" + CLUB_KEY;
+
+    //userSettings/$userKey/myClub
+    public static final String LOCATION_L_MY_CLUB = USER_SETTINGS + "/" + USER_KEY + "/" + MY_CLUB;
+
+    //userSettings/$userKey/defaultClub
+    public static final String LOCATION_DEFAULT_CLUB = USER_SETTINGS + "/" + USER_KEY + "/" + DEFAULT_CLUB;
 
     //userSettings/$userKey/myDevices
     public static final String LOCATION_MY_DEVICES = USER_SETTINGS + "/" + USER_KEY + "/" + MY_DEVICES;
@@ -66,7 +74,6 @@ public class Constants {
     //userSettings/$userKey/followedPlayers/byPlayer/$playerKey
     public static final String LOCATION_MY_FOLLOWED_PLAYERS_BY_PLAYER = LOCATION_MY_FOLLOWED_PLAYERS + "/" + BY_PLAYER + "/" + PLAYER_KEY;
 
-    public static final String LOCATION_DEFAULT_CLUB = USER_SETTINGS + "/" + USER_KEY + "/" + DEFAULT_CLUB;
 
     //tournaments/$clubKey
     public static final String LOCATION_TOURNAMENTS = TOURNAMENTS + "/" + CLUB_KEY;

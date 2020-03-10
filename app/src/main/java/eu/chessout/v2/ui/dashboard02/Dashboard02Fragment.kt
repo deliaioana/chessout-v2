@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import eu.chessout.shared.Constants
@@ -18,7 +19,6 @@ class Dashboard02Fragment : Fragment() {
 
 
     private lateinit var viewModel: Dashboard02ViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +46,19 @@ class Dashboard02Fragment : Fragment() {
         }
 
 
+        viewModel.myClubCreated.observe(this, Observer { isMyClbCreated ->
+            run {
+                if (isMyClbCreated) {
+                    // no need to create
+                    create_club_card.visibility = View.GONE
+                } else {
+                    // user should be allowed to create
+                    create_club_card.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        viewModel.initializeData()
     }
 
 }
