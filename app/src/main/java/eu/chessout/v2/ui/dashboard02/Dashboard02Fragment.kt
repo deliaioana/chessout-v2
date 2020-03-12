@@ -1,7 +1,6 @@
 package eu.chessout.v2.ui.dashboard02
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import eu.chessout.v2.ui.club.ClubCreateDialogFragment
 import kotlinx.android.synthetic.main.fragment_dashboard02.*
@@ -41,8 +39,11 @@ class Dashboard02Fragment : Fragment() {
         }
 
         create_club_card.setOnClickListener {
-            Log.d(Constants.LOG_TAG, "Time to create club")
             ClubCreateDialogFragment().show(childFragmentManager, "ClubCreateDialogFragment")
+        }
+
+        my_clubs_card.setOnClickListener { view ->
+            view.findNavController()?.navigate(R.id.navigation_my_clubs_fragment)
         }
 
 
