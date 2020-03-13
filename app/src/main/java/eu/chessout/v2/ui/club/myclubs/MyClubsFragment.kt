@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.firebase.ui.database.FirebaseListAdapter
@@ -86,6 +87,15 @@ class MyClubsFragment : Fragment() {
 
 
         list_view_my_clubs.adapter = adapter
+        list_view_my_clubs.setOnItemLongClickListener { parent, view, position, id ->
+            val selectedClub = adapter.getItem(position)
+            Toast.makeText(
+                activity!!.baseContext,
+                "Lon click ${selectedClub.shortName}",
+                Toast.LENGTH_SHORT
+            ).show()
+            true
+        }
 
     }
 
