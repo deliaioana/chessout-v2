@@ -1,6 +1,8 @@
 package eu.chessout.v2.ui.club.myclubs
 
+//import com.firebase.ui.database.FirebaseListAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +11,17 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.firebase.ui.database.FirebaseListAdapter
+import com.firebase.ui.database.FirebaseListOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.Constants
+import eu.chessout.shared.Constants.CLUB_KEY
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
+import eu.chessout.v2.R.layout
 import kotlinx.android.synthetic.main.my_clubs_fragment.*
 
 
@@ -30,7 +35,7 @@ class MyClubsFragment : Fragment() {
 
     private lateinit var mView: View
     private lateinit var mListView: ListView
-    private lateinit var mAdapter: FirebaseListAdapter<Club>
+    // private lateinit var mAdapter: FirebaseListAdapter<Club>
 
 
     private lateinit var viewModel: MyClubsViewModel
@@ -39,7 +44,7 @@ class MyClubsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.my_clubs_fragment, container, false)
+        return inflater.inflate(layout.my_clubs_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,27 +62,30 @@ class MyClubsFragment : Fragment() {
         //Firebase reference
         val myClubsLocation: String = Constants.LOCATION_MY_CLUBS
             .replace(Constants.USER_KEY, mUser.uid)
-        mClubsReference = FirebaseDatabase.getInstance().getReference(myClubsLocation)
+            .replace("/$CLUB_KEY", "") // exclude MY_CLUBS
+
+        val mClubsQuery = FirebaseDatabase.getInstance().reference
+            .child(myClubsLocation).orderByKey()
 
         //create custom FirebaseListAdapter subclass
 
-        //create custom FirebaseListAdapter subclass
-        mAdapter = object : FirebaseListAdapter<Club>(
-            activity,
-            Club::class.java,
-            R.layout.list_item_text,
-            mClubsReference
-        ) {
-            override fun populateView(
-                v: View,
-                model: Club,
-                position: Int
-            ) {
+        val options = FirebaseListOptions.Builder<Club>()
+            .setLifecycleOwner(this)
+            .setLayout(R.layout.list_item_text)
+            .setQuery(mClubsQuery, Club::class.java)
+            .build()
+
+        val adapter: FirebaseListAdapter<Club> = object : FirebaseListAdapter<Club>(options) {
+            override fun populateView(v: View, model: Club, position: Int) {
                 (v.findViewById<View>(R.id.list_item_text_simple_view) as TextView).text =
                     model.shortName
+                Log.d(logTag, "Club: ${model.shortName}")
             }
         }
-        list_view_my_clubs.adapter = mAdapter
+
+
+
+        list_view_my_clubs.adapter = adapter
 
     }
 
