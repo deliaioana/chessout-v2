@@ -21,13 +21,10 @@ class TournamentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.tournaments_fragment, container, false)
-        setHasOptionsMenu(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
         val model: TournamentsViewModel by viewModels()
     }
 
