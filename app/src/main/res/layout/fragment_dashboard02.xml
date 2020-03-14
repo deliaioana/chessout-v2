@@ -98,5 +98,35 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/tournaments_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintStart_toEndOf="@+id/my_clubs_card"
+        app:layout_constraintTop_toBottomOf="@+id/sign_out_card">
+
+        <ImageView
+            android:id="@+id/tournaments_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_photo_library_24px" />
+
+        <TextView
+            android:id="@+id/tournaments_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/tournaments_icon"
+            android:text="Tournaments"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

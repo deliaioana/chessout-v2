@@ -46,6 +46,10 @@ class Dashboard02Fragment : Fragment() {
             view.findNavController()?.navigate(R.id.navigation_my_clubs_fragment)
         }
 
+        tournaments_card.setOnClickListener { view ->
+            view.findNavController()?.navigate(R.id.tournaments_navigation)
+        }
+
 
         viewModel.myClubCreated.observe(this, Observer { isMyClbCreated ->
             run {

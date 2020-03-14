@@ -43,4 +43,9 @@
         android:name="eu.chessout.v2.ui.club.myclubs.MyClubsFragment"
         android:label="my_clubs_fragment"
         tools:layout="@layout/my_clubs_fragment" />
+    <fragment
+        android:id="@+id/tournaments_navigation"
+        android:name="eu.chessout.v2.ui.tournament.tournaments.TournamentsFragment"
+        android:label="Tournaments"
+        tools:layout="@layout/tournaments_fragment" />
 </navigation>
