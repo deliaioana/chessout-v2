@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Club
 import eu.chessout.shared.model.DefaultClub
+import eu.chessout.shared.model.Tournament
 import eu.chessout.shared.model.User
 
 class MyFirebaseUtils {
@@ -91,6 +92,31 @@ class MyFirebaseUtils {
         val myClubsRef =
             database.getReference(myClubLocation)
         myClubsRef.setValue(club)
+    }
+
+    fun updateTournamentReversedOrder(
+        clubKey: String?,
+        tournamentKey: String
+    ) {
+        val database =
+            FirebaseDatabase.getInstance()
+        val tournamentLocation = Constants.LOCATION_TOURNAMENTS
+            .replace(Constants.CLUB_KEY, clubKey!!) + "/" + tournamentKey
+        val tournamentRef =
+            database.getReference(tournamentLocation)
+        tournamentRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tournament: Tournament? = dataSnapshot.getValue(Tournament::class.java)
+                if (tournament != null) {
+                    val timeStamp: Long = tournament.dateCreatedGetLong()
+                    val reversedDateCreated = 0 - timeStamp
+                    tournamentRef.child("reversedDateCreated").setValue(reversedDateCreated)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
 }

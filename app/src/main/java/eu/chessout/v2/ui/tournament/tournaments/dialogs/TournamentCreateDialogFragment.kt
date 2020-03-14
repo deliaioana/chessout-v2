@@ -8,7 +8,12 @@ import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.gms.common.util.Strings
+import com.google.firebase.database.FirebaseDatabase
+import eu.chessout.shared.Constants
+import eu.chessout.shared.model.Tournament
 import eu.chessout.v2.R
+import eu.chessout.v2.util.MyFirebaseUtils
 
 class TournamentCreateDialogFragment(var mClubKey: String) : DialogFragment() {
 
@@ -73,8 +78,48 @@ class TournamentCreateDialogFragment(var mClubKey: String) : DialogFragment() {
         if (!sb.toString().isEmpty()) {
             sb.append("Please try again")
             Toast.makeText(context, sb.toString(), Toast.LENGTH_LONG).show()
+        } else {
+            persistTournament()
         }
+    }
 
+    private fun persistTournament() {
+        var tournamentFirstTableNumber: Int = 1
+        val firstNumber =
+            (mView.findViewById<View>(R.id.tournamentFirstTableNumber) as EditText).text
+                .toString()
+        if (Strings.isEmptyOrWhitespace(firstNumber)) {
+            try {
+                val intFirstNumber = Integer.valueOf(firstNumber)
+                if (intFirstNumber > 0) {
+                    tournamentFirstTableNumber = intFirstNumber
+                }
+            } catch (e: NumberFormatException) {
+                // do nothing
+            }
+        }
+        val tournament = Tournament(
+            (mView.findViewById<View>(R.id.tournamentName) as EditText).text
+                .toString(),
+            (mView.findViewById<View>(R.id.tournamentDescription) as EditText).text
+                .toString(),
+            (mView.findViewById<View>(R.id.tournamentLocation) as EditText).text
+                .toString(),
+            (mView.findViewById<View>(R.id.tournamentTotalRounds) as NumberPicker).value,
+            tournamentFirstTableNumber
+        )
+        val tournamentLocation: String = Constants.LOCATION_TOURNAMENTS
+            .replace(Constants.CLUB_KEY, mClubKey)
+        val database =
+            FirebaseDatabase.getInstance()
+        val tournaments =
+            database.getReference(tournamentLocation)
+        val tournamentRef = tournaments.push()
+        tournamentRef.setValue(tournament)
 
+        //update reversed order
+        val tournamentKey = tournamentRef.key!!
+        val myFirebaseUtils = MyFirebaseUtils()
+        myFirebaseUtils.updateTournamentReversedOrder(mClubKey, tournamentKey)
     }
 }
