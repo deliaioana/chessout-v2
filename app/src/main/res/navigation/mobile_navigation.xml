@@ -33,7 +33,11 @@
         android:id="@+id/navigation_dashboard02"
         android:name="eu.chessout.v2.ui.dashboard02.Dashboard02Fragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard02" />
+        tools:layout="@layout/fragment_dashboard02">
+        <action
+            android:id="@+id/action_navigation_dashboard02_to_tournaments_navigation"
+            app:destination="@id/tournaments_navigation" />
+    </fragment>
     <fragment
         android:id="@+id/clubCreateDialogFragment"
         android:name="eu.chessout.v2.ui.club.ClubCreateDialogFragment"

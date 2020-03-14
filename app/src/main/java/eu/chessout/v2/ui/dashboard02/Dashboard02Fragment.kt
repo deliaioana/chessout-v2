@@ -47,11 +47,14 @@ class Dashboard02Fragment : Fragment() {
         }
 
         tournaments_card.setOnClickListener { view ->
-            view.findNavController()?.navigate(R.id.tournaments_navigation)
+
+            val action = Dashboard02FragmentDirections
+                .actionNavigationDashboard02ToTournamentsNavigation()
+            view.findNavController()?.navigate(action)
         }
 
 
-        viewModel.myClubCreated.observe(this, Observer { isMyClbCreated ->
+        viewModel.myClubCreated.observe(viewLifecycleOwner, Observer { isMyClbCreated ->
             run {
                 if (isMyClbCreated) {
                     // no need to create
