@@ -90,7 +90,7 @@ class MyClubsFragment : Fragment() {
         list_view_my_clubs.setOnItemLongClickListener { parent, view, position, id ->
             val selectedClub = adapter.getItem(position)
             Toast.makeText(
-                activity!!.baseContext,
+                requireActivity().baseContext,
                 "Lon click ${selectedClub.shortName}",
                 Toast.LENGTH_SHORT
             ).show()
