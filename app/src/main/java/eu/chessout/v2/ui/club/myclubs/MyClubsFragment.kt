@@ -23,6 +23,7 @@ import eu.chessout.shared.Constants.CLUB_KEY
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
 import eu.chessout.v2.R.layout
+import eu.chessout.v2.ui.club.joinclub.JoinClubDialog
 import kotlinx.android.synthetic.main.my_clubs_fragment.*
 
 
@@ -97,6 +98,10 @@ class MyClubsFragment : Fragment() {
             true
         }
 
-    }
 
+        // configure fab
+        fab.setOnClickListener {
+            JoinClubDialog().show(childFragmentManager, "JoinClubDialog")
+        }
+    }
 }

@@ -36,7 +36,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myViewModel = ViewModelProviders.of(this).get(MyViewModel::class.java)
-        myViewModel.dashboardModelList.observe(this, myObserver)
+        myViewModel.dashboardModelList.observe(viewLifecycleOwner, myObserver)
         myViewModel.getInitialList()
 
         my_recycler_view?.apply {

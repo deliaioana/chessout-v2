@@ -54,6 +54,8 @@ class Dashboard02Fragment : Fragment() {
         }
 
 
+
+
         viewModel.myClubCreated.observe(viewLifecycleOwner, Observer { isMyClbCreated ->
             run {
                 if (isMyClbCreated) {
