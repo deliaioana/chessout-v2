@@ -74,6 +74,7 @@ class ClubCreateDialogFragment : DialogFragment() {
         val clubs =
             database.getReference(Constants.CLUBS)
         val clubRef = clubs.push()
+        club.clubId = clubRef.key
         clubRef.setValue(club)
         val clubId = clubRef.key
         Log.d(LOG_TAG, "clubId = $clubId")
