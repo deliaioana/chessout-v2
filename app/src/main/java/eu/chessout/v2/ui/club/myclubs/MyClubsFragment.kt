@@ -2,7 +2,6 @@ package eu.chessout.v2.ui.club.myclubs
 
 //import com.firebase.ui.database.FirebaseListAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +51,7 @@ class MyClubsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MyClubsViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.initializeModel()
 
         mApp = FirebaseApp.getInstance()
 
@@ -78,10 +77,10 @@ class MyClubsFragment : Fragment() {
             .build()
 
         val adapter: FirebaseListAdapter<Club> = object : FirebaseListAdapter<Club>(options) {
-            override fun populateView(v: View, model: Club, position: Int) {
-                (v.findViewById<View>(R.id.list_item_text_simple_view) as TextView).text =
-                    model.shortName
-                Log.d(logTag, "Club: ${model.shortName}")
+            override fun populateView(v: View, modelClub: Club, position: Int) {
+                val textView = v.findViewById<View>(R.id.list_item_text_simple_view) as TextView
+                textView.text = modelClub.shortName
+
             }
         }
 
