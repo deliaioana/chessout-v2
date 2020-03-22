@@ -9,6 +9,7 @@ import eu.chessout.shared.Constants;
  * Created by Bogdan Oloeriu on 5/25/2016.
  */
 public class Club implements Comparable<Club>{
+    private String clubId;
     private String name;
     private String shortName;
     private String email;
@@ -125,5 +126,11 @@ public class Club implements Comparable<Club>{
         this.updateStamp = updateStamp;
     }
 
+    public String getClubId() {
+        return clubId;
+    }
 
+    public void setClubId(String clubId) {
+        this.clubId = clubId;
+    }
 }

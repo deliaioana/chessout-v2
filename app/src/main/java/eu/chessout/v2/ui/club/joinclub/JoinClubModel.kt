@@ -20,18 +20,6 @@ class JoinClubModel() : ViewModel() {
 
         val clubs: ArrayList<Club> = ArrayList()
 
-        clubs.add(
-            Club(
-                "long name",
-                "short name",
-                "email",
-                "coutry",
-                "city",
-                "home page",
-                "description"
-            )
-        )
-
         val clubsLoc: String = Constants.CLUBS
         val clubsRef =
             FirebaseDatabase.getInstance().getReference(clubsLoc)
@@ -40,6 +28,7 @@ class JoinClubModel() : ViewModel() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (item in dataSnapshot.children) {
                     val club = item.getValue(Club::class.java)!!
+                    club.clubId = item.key
                     clubs.add(club)
                 }
                 liveClubs.value = clubs;

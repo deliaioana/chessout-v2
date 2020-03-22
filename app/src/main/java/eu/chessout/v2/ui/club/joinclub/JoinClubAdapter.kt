@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
+import eu.chessout.v2.util.MyFirebaseUtils
 
 class JoinClubAdapter(
     var clubList: ArrayList<Club>
@@ -37,6 +40,7 @@ class JoinClubAdapter(
 
 
         holder.textView.setOnClickListener {
+            joinClub(club)
             holder.textView.findNavController()?.navigate(
                 JoinClubFragmentDirections
                     .actionNavigationJoinClubFragmentToNavigationMyClubsFragment()
@@ -47,4 +51,16 @@ class JoinClubAdapter(
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView = itemView.findViewById<TextView>(R.id.list_item_text_simple_view)
     }
+
+    private fun joinClub(club: Club) {
+        val database =
+            FirebaseDatabase.getInstance()
+        val auth =
+            FirebaseAuth.getInstance()
+        val firebaseUser = auth.currentUser
+        val uid = firebaseUser!!.uid
+
+        MyFirebaseUtils().addToMyClubs(uid, club.clubId, club)
+    }
+
 }
