@@ -2,6 +2,7 @@ package eu.chessout.v2
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var firebaseUser: FirebaseUser? = null
     private lateinit var navController: NavController
+    private lateinit var bottomNavView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         checkLoggedIn()
 
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        bottomNavView = findViewById(R.id.bottom_nav_view)
 
         navController = findNavController(R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        bottomNavView.setupWithNavController(navController)
     }
 
     /**
@@ -55,5 +57,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp()
+    }
+
+
+    public fun showBottomNav() {
+        bottomNavView.visibility = View.VISIBLE
+    }
+
+    public fun hideBottomNav() {
+        bottomNavView.visibility = View.GONE
     }
 }

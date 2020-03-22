@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Club
+import eu.chessout.v2.MainActivity
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.fragment_join_club.*
 
@@ -47,6 +48,8 @@ class JoinClubFragment() : Fragment() {
             adapter = myListAdapter
         }
 
+
+
         return mView
     }
 
@@ -57,4 +60,16 @@ class JoinClubFragment() : Fragment() {
 
         return dialog
     }*/
+
+    override fun onStart() {
+        super.onStart()
+        val activity = activity as MainActivity
+        activity.hideBottomNav()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val activity = activity as MainActivity
+        activity.showBottomNav()
+    }
 }

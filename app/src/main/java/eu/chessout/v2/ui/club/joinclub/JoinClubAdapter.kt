@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
@@ -32,6 +33,15 @@ class JoinClubAdapter(
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val club: Club = clubList[position]
         holder.textView.text = club.name
+
+
+
+        holder.textView.setOnClickListener {
+            holder.textView.findNavController()?.navigate(
+                JoinClubFragmentDirections
+                    .actionNavigationJoinClubFragmentToNavigationMyClubsFragment()
+            )
+        }
     }
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

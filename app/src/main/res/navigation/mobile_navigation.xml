@@ -59,5 +59,11 @@
     <fragment
         android:id="@+id/navigation_join_club_fragment"
         android:name="eu.chessout.v2.ui.club.joinclub.JoinClubFragment"
-        android:label="join_club_fragment" />
+        android:label="join_club_fragment">
+        <action
+            android:id="@+id/action_navigation_join_club_fragment_to_navigation_my_clubs_fragment"
+            app:destination="@id/navigation_my_clubs_fragment"
+            app:popUpTo="@+id/navigation_my_clubs_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
