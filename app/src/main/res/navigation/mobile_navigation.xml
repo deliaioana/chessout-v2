@@ -45,7 +45,7 @@
     <fragment
         android:id="@+id/navigation_my_clubs_fragment"
         android:name="eu.chessout.v2.ui.club.myclubs.MyClubsFragment"
-        android:label="my_clubs_fragment"
+        android:label="My clubs"
         tools:layout="@layout/my_clubs_fragment">
         <action
             android:id="@+id/action_navigation_my_clubs_fragment_to_joinClubFragment"
