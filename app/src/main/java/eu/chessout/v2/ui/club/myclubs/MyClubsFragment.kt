@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.firebase.ui.database.FirebaseListAdapter
 import com.firebase.ui.database.FirebaseListOptions
 import com.google.firebase.FirebaseApp
@@ -23,7 +24,6 @@ import eu.chessout.shared.Constants.CLUB_KEY
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
 import eu.chessout.v2.R.layout
-import eu.chessout.v2.ui.club.joinclub.JoinClubDialog
 import kotlinx.android.synthetic.main.my_clubs_fragment.*
 
 
@@ -100,8 +100,9 @@ class MyClubsFragment : Fragment() {
 
 
         // configure fab
-        fab.setOnClickListener {
-            JoinClubDialog().show(childFragmentManager, "JoinClubDialog")
+        fab.setOnClickListener { view ->
+//            JoinClubDialog().show(childFragmentManager, "JoinClubDialog")
+            view.findNavController()?.navigate(R.id.navigation_join_club_fragment)
         }
     }
 }

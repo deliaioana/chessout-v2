@@ -46,10 +46,18 @@
         android:id="@+id/navigation_my_clubs_fragment"
         android:name="eu.chessout.v2.ui.club.myclubs.MyClubsFragment"
         android:label="my_clubs_fragment"
-        tools:layout="@layout/my_clubs_fragment" />
+        tools:layout="@layout/my_clubs_fragment">
+        <action
+            android:id="@+id/action_navigation_my_clubs_fragment_to_joinClubFragment"
+            app:destination="@id/navigation_join_club_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/tournaments_navigation"
         android:name="eu.chessout.v2.ui.tournament.tournaments.TournamentsFragment"
         android:label="Tournaments"
         tools:layout="@layout/tournaments_fragment" />
+    <fragment
+        android:id="@+id/navigation_join_club_fragment"
+        android:name="eu.chessout.v2.ui.club.joinclub.JoinClubFragment"
+        android:label="join_club_fragment" />
 </navigation>

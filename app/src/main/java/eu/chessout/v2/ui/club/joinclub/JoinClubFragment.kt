@@ -1,20 +1,19 @@
 package eu.chessout.v2.ui.club.joinclub
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
-import kotlinx.android.synthetic.main.dialog_join_club.*
+import kotlinx.android.synthetic.main.fragment_join_club.*
 
-class JoinClubDialog() : DialogFragment() {
+class JoinClubFragment() : Fragment() {
 
     private lateinit var mView: View
     private lateinit var joinClubModel: JoinClubModel
@@ -35,7 +34,7 @@ class JoinClubDialog() : DialogFragment() {
     ): View? {
 
 
-        mView = inflater.inflate(R.layout.dialog_join_club, container, false)
+        mView = inflater.inflate(R.layout.fragment_join_club, container, false)
 
         val model: JoinClubModel by viewModels()
         joinClubModel = model
@@ -51,11 +50,11 @@ class JoinClubDialog() : DialogFragment() {
         return mView
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    /*override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setTitle("Join club")
 
         return dialog
-    }
+    }*/
 }
