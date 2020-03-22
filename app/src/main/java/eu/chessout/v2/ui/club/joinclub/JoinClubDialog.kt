@@ -2,12 +2,14 @@ package eu.chessout.v2.ui.club.joinclub
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Club
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.dialog_join_club.*
@@ -26,31 +28,34 @@ class JoinClubDialog() : DialogFragment() {
 
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
 
-            val builder = AlertDialog.Builder(it)
-            builder.setTitle("Select club to join")
+        mView = inflater.inflate(R.layout.dialog_join_club, container, false)
 
-            val inflater = requireActivity().layoutInflater
+        val model: JoinClubModel by viewModels()
+        joinClubModel = model
+        joinClubModel.liveClubs.observe(viewLifecycleOwner, myObserver)
+        joinClubModel.initializeModel()
 
-            mView = inflater.inflate(R.layout.dialog_join_club, null)
-            builder.setView(mView)
+        val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
+        myRecyclerView?.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = myListAdapter
+        }
 
-            val model: JoinClubModel by viewModels()
-            joinClubModel = model
-            joinClubModel.liveClubs.observe(viewLifecycleOwner, myObserver)
-            joinClubModel.initializeModel()
-
-            my_recycler_view?.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = myListAdapter
-            }
-
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
-
+        return mView
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setTitle("Join club")
+
+        return dialog
+    }
 }
