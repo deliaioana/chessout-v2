@@ -62,14 +62,6 @@ class JoinClubFragment() : Fragment() {
         }
     }
 
-    /*override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-         val dialog = super.onCreateDialog(savedInstanceState)
-         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-         dialog.setTitle("Join club")
-
-         return dialog
-     }*/
-
     override fun onStart() {
         super.onStart()
         val activity = activity as MainActivity

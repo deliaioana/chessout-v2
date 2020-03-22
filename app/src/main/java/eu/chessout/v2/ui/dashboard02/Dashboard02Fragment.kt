@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import eu.chessout.v2.R
 import eu.chessout.v2.ui.club.ClubCreateDialogFragment
@@ -31,7 +31,9 @@ class Dashboard02Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(Dashboard02ViewModel::class.java)
+
+        val model: Dashboard02ViewModel by viewModels()
+        viewModel = model
 
         sign_out_card.setOnClickListener {
             var argsBundle = bundleOf("timeToLogOut" to true)
@@ -55,7 +57,6 @@ class Dashboard02Fragment : Fragment() {
 
 
 
-
         viewModel.myClubCreated.observe(viewLifecycleOwner, Observer { isMyClbCreated ->
             run {
                 if (isMyClbCreated) {
@@ -64,6 +65,16 @@ class Dashboard02Fragment : Fragment() {
                 } else {
                     // user should be allowed to create
                     create_club_card.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        viewModel.defaultClubExists.observe(viewLifecycleOwner, Observer { defaultClubExists ->
+            run {
+                if (defaultClubExists) {
+                    tournaments_card.visibility = View.VISIBLE
+                } else {
+                    tournaments_card.visibility = View.GONE
                 }
             }
         })

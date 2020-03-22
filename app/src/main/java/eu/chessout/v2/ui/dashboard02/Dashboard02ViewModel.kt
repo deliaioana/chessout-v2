@@ -10,6 +10,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.chessout.shared.Constants
+import eu.chessout.shared.model.DefaultClub
+import eu.chessout.v2.util.MyFirebaseUtils
 import kotlin.concurrent.thread
 
 val TAG = Constants.LOG_TAG
@@ -29,12 +31,13 @@ class Dashboard02ViewModel : ViewModel() {
     }
 
     private val _myClubCreated = MutableLiveData<Boolean>().apply {
-        value = false
+        value = true
     }
 
     val text: LiveData<String> = _text
     val countValue: LiveData<Int> = _countValue
     val myClubCreated: LiveData<Boolean> = _myClubCreated
+    val defaultClubExists = MutableLiveData<Boolean>(false)
 
 
     fun initializeCount() {
@@ -51,6 +54,13 @@ class Dashboard02ViewModel : ViewModel() {
             dataInitialized = true;
             checkClubCreated()
         }
+
+        class DefaultClubListener : MyFirebaseUtils.DefaultClubListener {
+            override fun onDefaultClubValue(defaultClub: DefaultClub) {
+                defaultClubExists.value = true
+            }
+        }
+        MyFirebaseUtils().getDefaultClubSingleValueListener(DefaultClubListener())
     }
 
     private fun checkClubCreated() {

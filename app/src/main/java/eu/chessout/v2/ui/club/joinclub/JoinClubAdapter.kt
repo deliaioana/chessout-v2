@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.model.Club
+import eu.chessout.shared.model.DefaultClub
 import eu.chessout.v2.R
 import eu.chessout.v2.util.MyFirebaseUtils
 
@@ -40,7 +41,7 @@ class JoinClubAdapter(
 
 
         holder.textView.setOnClickListener {
-            joinClub(club)
+            joinAndSetDefaultClub(club)
             holder.textView.findNavController()?.navigate(
                 JoinClubFragmentDirections
                     .actionNavigationJoinClubFragmentToNavigationMyClubsFragment()
@@ -52,7 +53,7 @@ class JoinClubAdapter(
         var textView = itemView.findViewById<TextView>(R.id.list_item_text_simple_view)
     }
 
-    private fun joinClub(club: Club) {
+    private fun joinAndSetDefaultClub(club: Club) {
         val database =
             FirebaseDatabase.getInstance()
         val auth =
@@ -60,7 +61,11 @@ class JoinClubAdapter(
         val firebaseUser = auth.currentUser
         val uid = firebaseUser!!.uid
 
-        MyFirebaseUtils().addToMyClubs(uid, club.clubId, club)
+        val firebaseUtils = MyFirebaseUtils()
+        firebaseUtils.addToMyClubs(uid, club.clubId, club)
+
+        val defaultClub = DefaultClub(club.clubId, club.name)
+        firebaseUtils.setDefaultClub(defaultClub)
     }
 
 }

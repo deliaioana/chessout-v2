@@ -1,6 +1,5 @@
 package eu.chessout.v2.util
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,8 +44,9 @@ class MyFirebaseUtils {
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val defaultClub = dataSnapshot.getValue(DefaultClub::class.java)
-                Log.d(Constants.LOG_TAG, "default Club found")
-                listener.onDefaultClubValue(defaultClub!!)
+                if (null != defaultClub) {
+                    listener.onDefaultClubValue(defaultClub!!)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -68,8 +68,9 @@ class MyFirebaseUtils {
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val defaultClub = dataSnapshot.getValue(DefaultClub::class.java)
-                Log.d(Constants.LOG_TAG, "default Club found")
-                listener.onDefaultClubValue(defaultClub!!)
+                if (null != defaultClub) {
+                    listener.onDefaultClubValue(defaultClub!!)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
