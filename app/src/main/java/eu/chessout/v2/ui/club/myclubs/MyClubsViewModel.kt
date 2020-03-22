@@ -16,6 +16,8 @@ class MyClubsViewModel : ViewModel() {
                 liveDefaultClubId.value = defaultClub.clubKey
             }
         }
+
+        MyFirebaseUtils().getDefaultClubListener(DefaultClubListener())
     }
 
 }

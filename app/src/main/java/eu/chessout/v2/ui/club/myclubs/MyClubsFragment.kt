@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.firebase.ui.database.FirebaseListAdapter
@@ -21,8 +22,10 @@ import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.Constants
 import eu.chessout.shared.Constants.CLUB_KEY
 import eu.chessout.shared.model.Club
+import eu.chessout.shared.model.DefaultClub
 import eu.chessout.v2.R
 import eu.chessout.v2.R.layout
+import eu.chessout.v2.util.MyFirebaseUtils
 import kotlinx.android.synthetic.main.my_clubs_fragment.*
 
 
@@ -79,8 +82,32 @@ class MyClubsFragment : Fragment() {
         val adapter: FirebaseListAdapter<Club> = object : FirebaseListAdapter<Club>(options) {
             override fun populateView(v: View, modelClub: Club, position: Int) {
                 val textView = v.findViewById<View>(R.id.list_item_text_simple_view) as TextView
-                textView.text = modelClub.shortName
+                //textView.text = modelClub.shortName
 
+                // set name based on if default club or not
+                val textViewObserver = Observer<String> {
+                    it?.let {
+                        if (modelClub.clubId == it) {
+                            textView.text = "${modelClub.shortName}   (default)"
+                        } else {
+                            textView.text = modelClub.shortName
+                        }
+                    }
+                }
+                viewModel.liveDefaultClubId.observe(viewLifecycleOwner, textViewObserver)
+
+                // add listener
+                textView.setOnClickListener {
+                    Toast.makeText(
+                        requireActivity().baseContext,
+                        "Club: ${modelClub.shortName} Is now the default club",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    if (modelClub.clubId != null) {
+                        val defaultClub = DefaultClub(modelClub.clubId, modelClub.name)
+                        MyFirebaseUtils().setDefaultClub(defaultClub)
+                    }
+                }
             }
         }
 
@@ -94,6 +121,7 @@ class MyClubsFragment : Fragment() {
                 "Lon click ${selectedClub.shortName}",
                 Toast.LENGTH_SHORT
             ).show()
+
             true
         }
 

@@ -23,7 +23,7 @@ class TournamentsViewModel : ViewModel() {
                 processDefaultClub(defaultClub)
             }
         }
-        myFirebaseUtils.getDefaultClub(ClubListener())
+        myFirebaseUtils.getDefaultClubSingleValueListener(ClubListener())
 
     }
 

@@ -30,7 +30,7 @@ class MyFirebaseUtils {
         fun onDefaultClubValue(defaultClub: DefaultClub)
     }
 
-    fun getDefaultClub(
+    fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
         val database =
@@ -42,6 +42,29 @@ class MyFirebaseUtils {
         val defaultClubRef =
             database.getReference(defaultClubLocation)
         defaultClubRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val defaultClub = dataSnapshot.getValue(DefaultClub::class.java)
+                Log.d(Constants.LOG_TAG, "default Club found")
+                listener.onDefaultClubValue(defaultClub!!)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    fun getDefaultClubListener(
+        listener: DefaultClubListener
+    ) {
+        val database =
+            FirebaseDatabase.getInstance()
+        val uid =
+            FirebaseAuth.getInstance().currentUser!!.uid
+        val defaultClubLocation = Constants.LOCATION_DEFAULT_CLUB
+            .replace(Constants.USER_KEY, uid)
+        val defaultClubRef =
+            database.getReference(defaultClubLocation)
+        defaultClubRef.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val defaultClub = dataSnapshot.getValue(DefaultClub::class.java)
