@@ -29,6 +29,10 @@ class MyFirebaseUtils {
         fun onDefaultClubValue(defaultClub: DefaultClub)
     }
 
+    interface IsAdminListener {
+        fun onIsAdmin(isAdmin: Boolean)
+    }
+
     fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
@@ -140,6 +144,30 @@ class MyFirebaseUtils {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    fun isCurrentUserAdmin(clubKey: String?, isAdminListener: IsAdminListener) {
+        val managers =
+            arrayOf(false) //first boolean holds the result
+        val uid =
+            FirebaseAuth.getInstance().currentUser!!.uid
+        val clubManagerLoc = Constants.LOCATION_CLUB_MANAGERS
+            .replace(Constants.CLUB_KEY, clubKey!!)
+            .replace(Constants.MANAGER_KEY, uid)
+        val managerRef =
+            FirebaseDatabase.getInstance().getReference(clubManagerLoc)
+        managerRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    isAdminListener.onIsAdmin(true)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                isAdminListener.onIsAdmin(false)
+            }
         })
     }
 

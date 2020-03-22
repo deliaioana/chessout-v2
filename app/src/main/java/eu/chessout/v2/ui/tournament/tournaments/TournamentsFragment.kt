@@ -37,6 +37,17 @@ class TournamentsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val model: TournamentsViewModel by viewModels()
         viewModel = model
+
+        viewModel.isAdmin.observe(viewLifecycleOwner, Observer { isAdmin ->
+            run {
+                if (isAdmin) {
+                    fab.visibility = View.VISIBLE
+                } else {
+                    fab.visibility = View.GONE
+                }
+            }
+        })
+
         viewModel.initializeModel()
 
         fab.setOnClickListener { view ->
@@ -46,6 +57,8 @@ class TournamentsFragment : Fragment() {
                 "TournamentCreateDialogFragment"
             )
         }
+
+
 
         viewModel.getClubKey().observe(viewLifecycleOwner, Observer { clubKey ->
             run {

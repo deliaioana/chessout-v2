@@ -10,6 +10,7 @@ import eu.chessout.v2.util.MyFirebaseUtils
 class TournamentsViewModel : ViewModel() {
     private var clubKey = MutableLiveData<String>().apply { value = "" }
     private lateinit var myFirebaseUtils: MyFirebaseUtils
+    var isAdmin = MutableLiveData<Boolean>(false)
 
     fun getClubKey(): LiveData<String> {
         return clubKey
@@ -25,9 +26,18 @@ class TournamentsViewModel : ViewModel() {
         }
         myFirebaseUtils.getDefaultClubSingleValueListener(ClubListener())
 
+
     }
 
     private fun processDefaultClub(defaultClub: DefaultClub) {
         clubKey.value = defaultClub.clubKey
+
+        class IsAdminListener : MyFirebaseUtils.IsAdminListener {
+            override fun onIsAdmin(returnAdmin: Boolean) {
+                isAdmin.value = returnAdmin
+            }
+        }
+
+        myFirebaseUtils.isCurrentUserAdmin(defaultClub.clubKey, IsAdminListener())
     }
 }
