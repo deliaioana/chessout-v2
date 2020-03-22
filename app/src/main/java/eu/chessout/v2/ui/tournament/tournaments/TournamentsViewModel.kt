@@ -25,8 +25,6 @@ class TournamentsViewModel : ViewModel() {
             }
         }
         myFirebaseUtils.getDefaultClubSingleValueListener(ClubListener())
-
-
     }
 
     private fun processDefaultClub(defaultClub: DefaultClub) {
