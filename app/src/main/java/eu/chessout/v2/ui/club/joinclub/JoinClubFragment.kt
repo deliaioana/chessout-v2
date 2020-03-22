@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Club
@@ -48,18 +49,26 @@ class JoinClubFragment() : Fragment() {
             adapter = myListAdapter
         }
 
-
-
         return mView
     }
 
-    /*override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setTitle("Join club")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        fab.setOnClickListener { view ->
+            view.findNavController().navigate(
+                JoinClubFragmentDirections
+                    .actionNavigationJoinClubFragmentToNavigationMyClubsFragment()
+            )
+        }
+    }
 
-        return dialog
-    }*/
+    /*override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+         val dialog = super.onCreateDialog(savedInstanceState)
+         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+         dialog.setTitle("Join club")
+
+         return dialog
+     }*/
 
     override fun onStart() {
         super.onStart()

@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/navigation_join_club_fragment"
         android:name="eu.chessout.v2.ui.club.joinclub.JoinClubFragment"
-        android:label="join_club_fragment">
+        android:label="Join club">
         <action
             android:id="@+id/action_navigation_join_club_fragment_to_navigation_my_clubs_fragment"
             app:destination="@id/navigation_my_clubs_fragment"
