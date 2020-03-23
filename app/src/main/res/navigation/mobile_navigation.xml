@@ -73,7 +73,7 @@
     <fragment
         android:id="@+id/tournamentDashboardFragment"
         android:name="eu.chessout.v2.ui.tournament.tournaments.dashboard.TournamentDashboardFragment"
-        android:label="tournament_dashboard_fragment"
+        android:label="Tournament dashboard"
         tools:layout="@layout/tournament_dashboard_fragment">
         <argument
             android:name="tournamentId"
