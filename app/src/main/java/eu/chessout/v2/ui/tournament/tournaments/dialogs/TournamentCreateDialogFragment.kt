@@ -98,27 +98,38 @@ class TournamentCreateDialogFragment(var mClubKey: String) : DialogFragment() {
                 // do nothing
             }
         }
-        val tournament = Tournament(
-            (mView.findViewById<View>(R.id.tournamentName) as EditText).text
-                .toString(),
-            (mView.findViewById<View>(R.id.tournamentDescription) as EditText).text
-                .toString(),
-            (mView.findViewById<View>(R.id.tournamentLocation) as EditText).text
-                .toString(),
-            (mView.findViewById<View>(R.id.tournamentTotalRounds) as NumberPicker).value,
-            tournamentFirstTableNumber
-        )
-        val tournamentLocation: String = Constants.LOCATION_TOURNAMENTS
+
+        val tournamentName = (mView.findViewById<View>(R.id.tournamentName)
+                as EditText).text.toString()
+        val tournamentDescription = (mView.findViewById<View>(R.id.tournamentDescription)
+                as EditText).text.toString()
+        val tournamentLocation = (mView.findViewById<View>(R.id.tournamentLocation)
+                as EditText).text.toString()
+        val tournamentTotalRounds =
+            (mView.findViewById<View>(R.id.tournamentTotalRounds) as NumberPicker).value
+
+        val tournamentPathLocation: String = Constants.LOCATION_TOURNAMENTS
             .replace(Constants.CLUB_KEY, mClubKey)
         val database =
             FirebaseDatabase.getInstance()
         val tournaments =
-            database.getReference(tournamentLocation)
+            database.getReference(tournamentPathLocation)
         val tournamentRef = tournaments.push()
+        val tournamentKey = tournamentRef.key!!
+
+        val tournament = Tournament(
+            tournamentName,
+            tournamentDescription,
+            tournamentLocation,
+            tournamentTotalRounds,
+            tournamentFirstTableNumber,
+            mClubKey,
+            tournamentKey
+        )
         tournamentRef.setValue(tournament)
 
         //update reversed order
-        val tournamentKey = tournamentRef.key!!
+
         val myFirebaseUtils = MyFirebaseUtils()
         myFirebaseUtils.updateTournamentReversedOrder(mClubKey, tournamentKey)
     }

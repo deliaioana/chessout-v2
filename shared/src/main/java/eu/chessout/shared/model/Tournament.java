@@ -8,6 +8,8 @@ import eu.chessout.shared.Constants;
  * Created by Bogdan Oloeriu on 6/4/2016.
  */
 public class Tournament {
+    private String clubId;
+    private String tournamentId;
     private String name;
     private String description;
     private String location;
@@ -22,7 +24,7 @@ public class Tournament {
     public Tournament() {
     }
 
-    public Tournament(String name, String description, String location, int totalRounds, int firstTableNumber) {
+    public Tournament(String name, String description, String location, int totalRounds, int firstTableNumber, String clubId, String tournamentId) {
         HashMap<String, Object> timeStamp = new HashMap<>();
         timeStamp.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
@@ -33,6 +35,8 @@ public class Tournament {
         this.firstTableNumber = firstTableNumber;
         this.dateCreated = timeStamp;
         this.updateStamp = timeStamp;
+        this.clubId = clubId;
+        this.tournamentId = tournamentId;
     }
 
     public String getName() {
@@ -75,5 +79,19 @@ public class Tournament {
         return (long) dateCreated.get(Constants.FIREBASE_PROPERTY_TIMESTAMP);
     }
 
+    public String getClubId() {
+        return clubId;
+    }
 
+    public void setClubId(String clubId) {
+        this.clubId = clubId;
+    }
+
+    public String getTournamentId() {
+        return tournamentId;
+    }
+
+    public void setTournamentId(String tournamentId) {
+        this.tournamentId = tournamentId;
+    }
 }
