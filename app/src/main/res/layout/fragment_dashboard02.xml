@@ -134,7 +134,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/ic_photo_library_24px" />
+            android:src="@drawable/ic_users_solid" />
 
         <TextView
             android:id="@+id/players_text"

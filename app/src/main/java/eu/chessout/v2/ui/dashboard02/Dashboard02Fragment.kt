@@ -73,8 +73,10 @@ class Dashboard02Fragment : Fragment() {
             run {
                 if (defaultClubExists) {
                     tournaments_card.visibility = View.VISIBLE
+                    players_card.visibility = View.VISIBLE
                 } else {
                     tournaments_card.visibility = View.GONE
+                    players_card.visibility = View.GONE
                 }
             }
         })
