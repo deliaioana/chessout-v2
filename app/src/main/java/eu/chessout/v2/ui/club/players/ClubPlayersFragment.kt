@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import eu.chessout.shared.model.Player
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.club_players_fragment.*
 
@@ -14,6 +17,14 @@ class ClubPlayersFragment : Fragment() {
 
 
     private lateinit var viewModel: ClubPlayersViewModel
+
+    private val myListAdapter = ClubPlayersAdapter(arrayListOf())
+    private val myObserver = Observer<List<Player>> { list ->
+        list?.let {
+            my_recycler_view.visibility = View.VISIBLE
+            myListAdapter.updateList(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +44,14 @@ class ClubPlayersFragment : Fragment() {
                 }
             }
         })
-
+        viewModel.livePlayerList.observe(viewLifecycleOwner, myObserver)
         viewModel.initializeModel()
 
-
+        val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
+        myRecyclerView?.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = myListAdapter
+        }
 
         return mView
     }
@@ -44,7 +59,7 @@ class ClubPlayersFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             val clubKey = viewModel.getClubKey().value!!
             ClubPlayerCreateDialogFragment(clubKey).show(
                 childFragmentManager,
