@@ -47,7 +47,6 @@ class ClubPlayersViewModel : ViewModel() {
     }
 
     private fun initializeList() {
-        val players: ArrayList<Player> = ArrayList()
         val playersLoc: String = Constants.LOCATION_CLUB_PLAYERS
             .replace(Constants.CLUB_KEY, clubKey.value!!)
         val playersRef =
@@ -58,6 +57,7 @@ class ClubPlayersViewModel : ViewModel() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val players: ArrayList<Player> = ArrayList()
                 for (item in dataSnapshot.children) {
                     val player = item.getValue(Player::class.java)!!
                     players.add(player)
