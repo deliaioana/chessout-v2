@@ -1,5 +1,6 @@
 package eu.chessout.v2.ui.club.players
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import eu.chessout.shared.model.DefaultClub
@@ -9,6 +10,10 @@ class ClubPlayersViewModel : ViewModel() {
     private var clubKey = MutableLiveData<String>().apply { value = "" }
     private lateinit var myFirebaseUtils: MyFirebaseUtils
     var isAdmin = MutableLiveData<Boolean>(false)
+
+    fun getClubKey(): LiveData<String> {
+        return clubKey
+    }
 
     fun initializeModel() {
         myFirebaseUtils = MyFirebaseUtils()

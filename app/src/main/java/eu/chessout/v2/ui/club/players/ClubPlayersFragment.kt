@@ -39,11 +39,21 @@ class ClubPlayersFragment : Fragment() {
 
         viewModel.initializeModel()
 
+
+
         return mView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        fab.setOnClickListener { view ->
+            val clubKey = viewModel.getClubKey().value!!
+            ClubPlayerCreateDialogFragment().show(
+                childFragmentManager,
+                "ClubPlayerCreateDialogFragment"
+            )
+        }
 
     }
 }
