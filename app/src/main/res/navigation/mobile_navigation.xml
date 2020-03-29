@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_navigation_dashboard02_to_tournaments_navigation"
             app:destination="@id/tournaments_navigation" />
+        <action
+            android:id="@+id/action_navigation_dashboard02_to_clubPlayersFragment"
+            app:destination="@id/clubPlayersFragment" />
     </fragment>
     <fragment
         android:id="@+id/clubCreateDialogFragment"
@@ -82,4 +85,9 @@
             android:name="clubId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/clubPlayersFragment"
+        android:name="eu.chessout.v2.ui.club.players.ClubPlayersFragment"
+        android:label="Club players"
+        tools:layout="@layout/club_players_fragment" />
 </navigation>

@@ -55,6 +55,14 @@ class Dashboard02Fragment : Fragment() {
             view.findNavController()?.navigate(action)
         }
 
+        players_card.setOnClickListener { view ->
+            run {
+                val action =
+                    Dashboard02FragmentDirections.actionNavigationDashboard02ToClubPlayersFragment()
+                view.findNavController()?.navigate(action)
+            }
+        }
+
 
 
         viewModel.myClubCreated.observe(viewLifecycleOwner, Observer { isMyClbCreated ->
