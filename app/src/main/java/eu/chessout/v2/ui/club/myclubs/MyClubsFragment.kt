@@ -81,7 +81,7 @@ class MyClubsFragment : Fragment() {
 
         val adapter: FirebaseListAdapter<Club> = object : FirebaseListAdapter<Club>(options) {
             override fun populateView(v: View, modelClub: Club, position: Int) {
-                val textVew = v.findViewById<View>(R.id.list_item_text_simple_view) as TextView
+                val textView = v.findViewById<View>(R.id.list_item_text_simple_view) as TextView
                 //textView.text = modelClub.shortName
 
                 // set name based on if default club or not
