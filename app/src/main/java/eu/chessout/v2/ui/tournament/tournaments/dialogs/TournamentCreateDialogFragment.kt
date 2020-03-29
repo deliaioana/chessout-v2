@@ -70,11 +70,6 @@ class TournamentCreateDialogFragment(var mClubKey: String) : DialogFragment() {
             sb.append("Tournament location is empty\n")
         }
 
-//                String firstNumber = ((EditText) mView.findViewById(R.id.tournamentFirstTableNumber)).getText().toString();
-//                if (firstNumber == null || firstNumber.isEmpty()){
-//                    sb.append("Tournament first table number is empty\n");
-//                }
-
         if (!sb.toString().isEmpty()) {
             sb.append("Please try again")
             Toast.makeText(context, sb.toString(), Toast.LENGTH_LONG).show()

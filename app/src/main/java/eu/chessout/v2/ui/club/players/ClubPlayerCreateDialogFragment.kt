@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import eu.chessout.v2.R
 
-class ClubPlayerCreateDialogFragment : DialogFragment() {
+class ClubPlayerCreateDialogFragment(var mClubKey: String) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
 

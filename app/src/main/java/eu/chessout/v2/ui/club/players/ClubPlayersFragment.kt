@@ -12,9 +12,6 @@ import kotlinx.android.synthetic.main.club_players_fragment.*
 
 class ClubPlayersFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ClubPlayersFragment()
-    }
 
     private lateinit var viewModel: ClubPlayersViewModel
 
@@ -49,7 +46,7 @@ class ClubPlayersFragment : Fragment() {
 
         fab.setOnClickListener { view ->
             val clubKey = viewModel.getClubKey().value!!
-            ClubPlayerCreateDialogFragment().show(
+            ClubPlayerCreateDialogFragment(clubKey).show(
                 childFragmentManager,
                 "ClubPlayerCreateDialogFragment"
             )
