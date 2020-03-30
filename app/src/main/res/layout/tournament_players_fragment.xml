@@ -8,10 +8,10 @@
     tools:context=".ui.club.players.ClubPlayersFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/theTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Club players" />
+        android:text="Tournament players" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_recycler_view"

@@ -84,10 +84,24 @@
         <argument
             android:name="clubId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_tournamentDashboardFragment_to_tournamentPlayersFragment"
+            app:destination="@id/tournamentPlayersFragment" />
     </fragment>
     <fragment
         android:id="@+id/clubPlayersFragment"
         android:name="eu.chessout.v2.ui.club.players.ClubPlayersFragment"
         android:label="Club players"
         tools:layout="@layout/club_players_fragment" />
+    <fragment
+        android:id="@+id/tournamentPlayersFragment"
+        android:name="eu.chessout.v2.ui.tournament.tournaments.players.TournamentPlayersFragment"
+        android:label="Tournament players">
+        <argument
+            android:name="tournamentId"
+            app:argType="string" />
+        <argument
+            android:name="clubId"
+            app:argType="string" />
+    </fragment>
 </navigation>
