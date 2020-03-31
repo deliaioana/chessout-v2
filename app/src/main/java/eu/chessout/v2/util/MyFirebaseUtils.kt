@@ -203,4 +203,34 @@ class MyFirebaseUtils {
         }
     }
 
+    fun getTournamentPlayers(
+        tournamentId: String,
+        singleValueEvent: Boolean,
+        playersListener: PlayersListener
+    ) {
+        val playersLoc = Constants.LOCATION_TOURNAMENT_PLAYERS
+            .replace(Constants.TOURNAMENT_KEY, tournamentId)
+        val mReference =
+            FirebaseDatabase.getInstance().getReference(playersLoc)
+
+        val valueEventListener: ValueEventListener =
+            object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val tournamentPlayers = ArrayList<Player>()
+                    for (item in dataSnapshot.children) {
+                        val rankedPlayer = item.getValue(Player::class.java)
+                        tournamentPlayers.add(rankedPlayer!!)
+                    }
+                    playersListener.listUpdated(tournamentPlayers)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {}
+            }
+        if (singleValueEvent) {
+            mReference.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            mReference.addValueEventListener(valueEventListener)
+        }
+    }
+
 }

@@ -8,7 +8,7 @@ import eu.chessout.v2.util.MyFirebaseUtils
 class TournamentPlayersViewModel : ViewModel() {
     private var clubId = MutableLiveData<String>().apply { value = "" }
     private var tournamentId = MutableLiveData<String>().apply { value = "" }
-    var isAdmin = MutableLiveData<Boolean>(false)
+    var isAdmin = MutableLiveData(false)
     val livePlayerList = MutableLiveData<List<Player>>()
     val liveClubPlayerList = MutableLiveData<List<Player>>()
     val missingPlayers = MutableLiveData<List<Player>>()
@@ -47,7 +47,15 @@ class TournamentPlayersViewModel : ViewModel() {
     }
 
     private fun initPlayers() {
-        initClubPlayersList()
+        class PlayersListener : MyFirebaseUtils.PlayersListener {
+            override fun listUpdated(players: List<Player>) {
+                livePlayerList.value = players
+                initClubPlayersList()
+            }
+        }
+        myFirebaseUtils.getTournamentPlayers(
+            tournamentId.value!!, false, PlayersListener()
+        )
     }
 
     private fun initClubPlayersList() {
