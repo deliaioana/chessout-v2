@@ -18,6 +18,7 @@ class TournamentPlayersViewModel : ViewModel() {
         this.tournamentId.value = tournamentId
         myFirebaseUtils = MyFirebaseUtils()
 
+        initIsAdmin()
     }
 
 
@@ -28,5 +29,13 @@ class TournamentPlayersViewModel : ViewModel() {
             }
         }
         myFirebaseUtils.isCurrentUserAdmin(clubId.value, IsAdminListener())
+    }
+
+    fun getClubId(): String {
+        return clubId!!.value!!
+    }
+
+    fun getTournamentId(): String {
+        return tournamentId!!.value!!
     }
 }

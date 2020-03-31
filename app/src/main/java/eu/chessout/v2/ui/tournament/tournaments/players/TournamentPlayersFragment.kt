@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import eu.chessout.v2.R
+import eu.chessout.v2.ui.tournament.tournaments.addplayers.TournamentAddPlayersFragment
 import kotlinx.android.synthetic.main.tournament_players_fragment.*
 
 class TournamentPlayersFragment() : Fragment() {
@@ -37,4 +38,13 @@ class TournamentPlayersFragment() : Fragment() {
         return mView
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        fab.setOnClickListener {
+            TournamentAddPlayersFragment(
+                viewModel.getClubId(),
+                viewModel.getTournamentId()
+            ).show(childFragmentManager, "TournamentAddPlayersFragment")
+        }
+    }
 }
