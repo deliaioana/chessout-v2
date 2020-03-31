@@ -6,10 +6,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.chessout.shared.Constants
-import eu.chessout.shared.model.Club
-import eu.chessout.shared.model.DefaultClub
-import eu.chessout.shared.model.Tournament
-import eu.chessout.shared.model.User
+import eu.chessout.shared.model.*
 
 class MyFirebaseUtils {
     fun setDefaultClub(defaultClub: DefaultClub) {
@@ -31,6 +28,10 @@ class MyFirebaseUtils {
 
     interface IsAdminListener {
         fun onIsAdmin(isAdmin: Boolean)
+    }
+
+    interface PlayersListener {
+        fun listUpdated(players: List<Player>)
     }
 
     fun getDefaultClubSingleValueListener(
@@ -169,6 +170,37 @@ class MyFirebaseUtils {
                 isAdminListener.onIsAdmin(false)
             }
         })
+    }
+
+
+    fun getClubPlayers(
+        clubKey: String,
+        singleValueEvent: Boolean,
+        playersListener: PlayersListener
+    ) {
+        val clubPlayersLoc = Constants.LOCATION_CLUB_PLAYERS
+            .replace(Constants.CLUB_KEY, clubKey)
+        val clubPlayersRef =
+            FirebaseDatabase.getInstance().getReference(clubPlayersLoc)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val players = ArrayList<Player>()
+                for (item in dataSnapshot.children) {
+                    val player = item.getValue(Player::class.java)
+                    players.add(player!!)
+                }
+                playersListener.listUpdated(players)
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                // nothing to do
+            }
+        }
+        if (singleValueEvent) {
+            clubPlayersRef.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            clubPlayersRef.addValueEventListener(valueEventListener)
+        }
     }
 
 }
