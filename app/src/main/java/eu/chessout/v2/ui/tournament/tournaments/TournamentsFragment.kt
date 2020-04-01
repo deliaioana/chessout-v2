@@ -94,7 +94,9 @@ class TournamentsFragment : Fragment() {
                         textView.findNavController().navigate(
                             TournamentsFragmentDirections
                                 .actionTournamentsNavigationToTournamentDashboardFragment(
-                                    tournament.tournamentId, tournament.clubId
+                                    tournament.tournamentId,
+                                    tournament.clubId,
+                                    tournament.totalRounds
                                 )
                         )
                     }

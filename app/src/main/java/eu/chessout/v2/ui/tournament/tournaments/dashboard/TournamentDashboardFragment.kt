@@ -43,11 +43,13 @@ class TournamentDashboardFragment : Fragment() {
         tournamentRoundsCard.setOnClickListener { view ->
             val tournamentId = args.tournamentId
             val clubId = args.clubId
+            val totalRounds = args.totalRounds
+
 
             val action =
                 TournamentDashboardFragmentDirections
                     .actionTournamentDashboardFragmentToRoundPagerFragment(
-                        clubId, tournamentId
+                        clubId, tournamentId, totalRounds
                     )
             view.findNavController().navigate(action)
         }
