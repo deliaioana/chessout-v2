@@ -25,7 +25,9 @@ class RoundStateFragment(
 
         mView = inflater.inflate(R.layout.round_state_fragment, container, false)
 
-        val roundPlayersFragment = RoundPlayersFragment()
+        val roundPlayersFragment = RoundPlayersFragment.newInstance(
+            clubId, tournamentId, roundId
+        )
         val transaction = childFragmentManager.beginTransaction();
         transaction.replace(R.id.stateContainerView, roundPlayersFragment)
         transaction.commit()
