@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import eu.chessout.v2.R
-import eu.chessout.v2.ui.tournament.tournaments.rounds.players.RoundPlayersFragment
+import eu.chessout.v2.ui.tournament.tournaments.rounds.players.RoundAbsentPlayersFragment
 import kotlinx.android.synthetic.main.round_state_fragment.*
 
 class RoundStateFragment(
@@ -25,7 +25,7 @@ class RoundStateFragment(
 
         mView = inflater.inflate(R.layout.round_state_fragment, container, false)
 
-        val roundPlayersFragment = RoundPlayersFragment.newInstance(
+        val roundPlayersFragment = RoundAbsentPlayersFragment.newInstance(
             clubId, tournamentId, roundId
         )
         val transaction = childFragmentManager.beginTransaction();

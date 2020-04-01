@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.*
+import java.util.concurrent.CountDownLatch
 
 class MyFirebaseUtils {
     fun setDefaultClub(defaultClub: DefaultClub) {
@@ -231,6 +232,64 @@ class MyFirebaseUtils {
         } else {
             mReference.addValueEventListener(valueEventListener)
         }
+    }
+
+    fun getMissingPlayers(
+        tournamentId: String,
+        roundId: Int,
+        singleValueEvent: Boolean,
+        playersListener: PlayersListener
+    ) {
+        val roundPlayersLoc = Constants.LOCATION_ROUND_ABSENT_PLAYERS
+            .replace(Constants.TOURNAMENT_KEY, tournamentId)
+            .replace(Constants.ROUND_NUMBER, roundId.toString())
+        val mReference = FirebaseDatabase.getInstance()
+            .getReference(roundPlayersLoc)
+
+        val valueEventListener: ValueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val absentList = ArrayList<Player>()
+                for (item in dataSnapshot.children) {
+                    val player = item.getValue(Player::class.java)
+                    absentList.add(player!!)
+                }
+                playersListener.listUpdated(absentList)
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                // nothing to implement
+            }
+        }
+        if (singleValueEvent) {
+            mReference.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            mReference.addValueEventListener(valueEventListener)
+        }
+    }
+
+    fun waitGetTournamentPlayers(tournamentId: String): List<Player> {
+        val playersLoc = Constants.LOCATION_TOURNAMENT_PLAYERS
+            .replace(Constants.TOURNAMENT_KEY, tournamentId)
+        val mReference =
+            FirebaseDatabase.getInstance().getReference(playersLoc)
+        val latch = CountDownLatch(1)
+        val players = ArrayList<Player>()
+        val valueEventListener: ValueEventListener = object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                for (item in p0.children) {
+                    val player = item.getValue(Player::class.java)
+                    players.add(player!!)
+                }
+                latch.countDown()
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                latch.countDown()
+            }
+        }
+        mReference.addListenerForSingleValueEvent(valueEventListener)
+        latch.await()
+        return players
     }
 
 }
