@@ -43,4 +43,32 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/tournamentRoundsCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tournamentPlayersCard">
+
+        <ImageView
+            android:id="@+id/roundsIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_dice_d6_solid" />
+
+        <TextView
+            android:id="@+id/roundsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/roundsIcon"
+            android:text="Tournament rounds"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_tournamentDashboardFragment_to_tournamentPlayersFragment"
             app:destination="@id/tournamentPlayersFragment" />
+        <action
+            android:id="@+id/action_tournamentDashboardFragment_to_roundPagerFragment"
+            app:destination="@id/roundPagerFragment" />
     </fragment>
     <fragment
         android:id="@+id/clubPlayersFragment"
@@ -102,6 +105,17 @@
             app:argType="string" />
         <argument
             android:name="clubId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/roundPagerFragment"
+        android:name="eu.chessout.v2.ui.tournament.tournaments.rounds.pager.RoundPagerFragment"
+        android:label="Tournament rounds">
+        <argument
+            android:name="clubId"
+            app:argType="string" />
+        <argument
+            android:name="tournamentId"
             app:argType="string" />
     </fragment>
 </navigation>

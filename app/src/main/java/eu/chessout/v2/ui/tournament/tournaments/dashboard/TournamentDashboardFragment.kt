@@ -39,6 +39,18 @@ class TournamentDashboardFragment : Fragment() {
                     )
             view.findNavController().navigate(action)
         }
+
+        tournamentRoundsCard.setOnClickListener { view ->
+            val tournamentId = args.tournamentId
+            val clubId = args.clubId
+
+            val action =
+                TournamentDashboardFragmentDirections
+                    .actionTournamentDashboardFragmentToRoundPagerFragment(
+                        clubId, tournamentId
+                    )
+            view.findNavController().navigate(action)
+        }
     }
 
 }
