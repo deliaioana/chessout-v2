@@ -30,6 +30,8 @@ class RoundsPagerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val pagerAdapter = ScreenSlidePagerAdapter(this.requireActivity())
         roundsPager.adapter = pagerAdapter
+        roundsPager.setPageTransformer(ZoomOutPageTransformer())
+
     }
 
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
@@ -37,6 +39,5 @@ class RoundsPagerFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment =
             RoundStateFragment(args.clubId, args.tournamentId, position)
-
     }
 }
