@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import eu.chessout.v2.R
 
-class RoundStateFragment : Fragment() {
+class RoundStateFragment(clubId: String, tournamentId: String, roundId: Int) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
