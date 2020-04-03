@@ -5,7 +5,11 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.Constants
+import eu.chessout.shared.model.Player
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.round_absent_players_fragment.*
 
@@ -27,6 +31,13 @@ class RoundAbsentPlayersFragment : Fragment() {
     var roundId: Int = -1
     lateinit var mView: View
     private val viewModel: RoundAbsentPlayersViewModel by viewModels()
+    private val myListAdapter = RoundAbsentPlayersAdapter(arrayListOf())
+    private val myObserver = Observer<List<Player>> { list ->
+        list?.let {
+            my_recycler_view.visibility = View.VISIBLE
+            myListAdapter.updateList(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +56,15 @@ class RoundAbsentPlayersFragment : Fragment() {
         Log.d(Constants.LOG_TAG, "Debug round: $roundId")
         mView = inflater.inflate(R.layout.round_absent_players_fragment, container, false)
         setHasOptionsMenu(true)
+        viewModel.liveMissingPlayers.observe(viewLifecycleOwner, myObserver)
         viewModel.initialize(clubId, tournamentId)
+
+        val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
+        myRecyclerView?.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = myListAdapter
+        }
+
         return mView
     }
 

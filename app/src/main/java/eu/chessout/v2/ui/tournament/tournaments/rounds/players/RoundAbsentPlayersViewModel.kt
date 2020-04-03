@@ -22,6 +22,18 @@ class RoundAbsentPlayersViewModel : ViewModel() {
         GlobalScope.async {
             tournamentPlayers = myFirebaseUtils.suspendGetTournamentPlayers(tournamentId)
         }
+        initMissingPlayer()
+    }
+
+    private fun initMissingPlayer() {
+        class PlayersListener : MyFirebaseUtils.PlayersListener {
+            override fun listUpdated(players: List<Player>) {
+                liveMissingPlayers.value = players
+            }
+        }
+        myFirebaseUtils.getMissingPlayers(
+            tournamentId, roundId, false, PlayersListener()
+        )
     }
 
     fun getPresentPlayers(): List<Player> {
