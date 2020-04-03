@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import eu.chessout.shared.model.Player
 import eu.chessout.v2.R
 import eu.chessout.v2.ui.tournament.tournaments.rounds.players.RoundAbsentPlayersFragment
 import kotlinx.android.synthetic.main.round_state_fragment.*
@@ -16,6 +17,7 @@ class RoundStateFragment(
 ) : Fragment() {
 
     lateinit var mView: View
+    private lateinit var absentPlayersFragment: RoundAbsentPlayersFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,11 +27,11 @@ class RoundStateFragment(
 
         mView = inflater.inflate(R.layout.round_state_fragment, container, false)
 
-        val roundPlayersFragment = RoundAbsentPlayersFragment.newInstance(
+        absentPlayersFragment = RoundAbsentPlayersFragment.newInstance(
             clubId, tournamentId, roundId
         )
         val transaction = childFragmentManager.beginTransaction();
-        transaction.replace(R.id.stateContainerView, roundPlayersFragment)
+        transaction.replace(R.id.stateContainerView, absentPlayersFragment)
         transaction.commit()
 
         return mView
@@ -40,5 +42,8 @@ class RoundStateFragment(
         textView.text = "Round number $roundId"
     }
 
+    fun getPresentPlayers(): List<Player> {
+        return absentPlayersFragment.getPresentPlayers()
+    }
 
 }

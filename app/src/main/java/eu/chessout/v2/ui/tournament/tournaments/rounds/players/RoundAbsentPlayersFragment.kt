@@ -38,6 +38,7 @@ class RoundAbsentPlayersFragment : Fragment() {
             myListAdapter.updateList(it)
         }
     }
+    lateinit var mMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +56,7 @@ class RoundAbsentPlayersFragment : Fragment() {
     ): View? {
         Log.d(Constants.LOG_TAG, "Debug round: $roundId")
         mView = inflater.inflate(R.layout.round_absent_players_fragment, container, false)
-        setHasOptionsMenu(true)
+        //setHasOptionsMenu(true)
         viewModel.liveMissingPlayers.observe(viewLifecycleOwner, myObserver)
         viewModel.isAdmin.observe(viewLifecycleOwner, Observer { admin ->
             if (admin) {
@@ -83,12 +84,19 @@ class RoundAbsentPlayersFragment : Fragment() {
                 "Total tournament players = ${viewModel.tournamentPlayers.size}"
             )
         }
+        mView.onFocusChangeListener = View.OnFocusChangeListener { _, isFocused ->
+
+            val menuItem = mMenu.findItem(R.id.addAbsentPlayers)
+            menuItem.isVisible = isFocused
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.round_absent_players_menu, menu)
+        mMenu = menu
         super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -103,5 +111,9 @@ class RoundAbsentPlayersFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun getPresentPlayers(): List<Player> {
+        return viewModel.getPresentPlayers()
     }
 }
