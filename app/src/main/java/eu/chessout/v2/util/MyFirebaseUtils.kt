@@ -267,13 +267,13 @@ class MyFirebaseUtils {
         }
     }
 
-    fun waitGetTournamentPlayers(tournamentId: String): List<Player> {
+    fun suspendGetTournamentPlayers(tournamentId: String): List<Player> {
         val playersLoc = Constants.LOCATION_TOURNAMENT_PLAYERS
             .replace(Constants.TOURNAMENT_KEY, tournamentId)
         val mReference =
             FirebaseDatabase.getInstance().getReference(playersLoc)
-        val latch = CountDownLatch(1)
         val players = ArrayList<Player>()
+        val latch = CountDownLatch(1)
         val valueEventListener: ValueEventListener = object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 for (item in p0.children) {
@@ -289,6 +289,7 @@ class MyFirebaseUtils {
         }
         mReference.addListenerForSingleValueEvent(valueEventListener)
         latch.await()
+
         return players
     }
 

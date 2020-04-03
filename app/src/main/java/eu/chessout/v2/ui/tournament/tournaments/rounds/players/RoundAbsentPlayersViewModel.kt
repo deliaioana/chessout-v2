@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import eu.chessout.shared.model.Player
 import eu.chessout.v2.util.MyFirebaseUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 
 class RoundAbsentPlayersViewModel : ViewModel() {
     lateinit var clubId: String
@@ -17,12 +19,21 @@ class RoundAbsentPlayersViewModel : ViewModel() {
         this.clubId = clubId
         this.tournamentId = tournamentId
 
-        tournamentPlayers = myFirebaseUtils.waitGetTournamentPlayers(tournamentId)
+        GlobalScope.async {
+            tournamentPlayers = myFirebaseUtils.suspendGetTournamentPlayers(tournamentId)
+        }
     }
 
-    fun initMissingPlayers() {
-
+    fun getPresentPlayers(): List<Player> {
+        val map = LinkedHashMap<String, Player>()
+        val missingSet = HashSet<String>()
+        missingSet.addAll(liveMissingPlayers.value!!.map { it.playerKey })
+        val presentPlayers = ArrayList<Player>()
+        tournamentPlayers.forEach {
+            if (!missingSet.contains(it.playerKey)) {
+                presentPlayers.add(it)
+            }
+        }
+        return presentPlayers
     }
-
-
 }
