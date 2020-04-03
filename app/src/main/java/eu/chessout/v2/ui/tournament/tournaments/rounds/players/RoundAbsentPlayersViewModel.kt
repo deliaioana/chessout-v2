@@ -27,7 +27,9 @@ class RoundAbsentPlayersViewModel : ViewModel() {
     fun getPresentPlayers(): List<Player> {
         val map = LinkedHashMap<String, Player>()
         val missingSet = HashSet<String>()
-        missingSet.addAll(liveMissingPlayers.value!!.map { it.playerKey })
+        liveMissingPlayers.value?.map {
+            missingSet.add(it.playerKey)
+        }
         val presentPlayers = ArrayList<Player>()
         tournamentPlayers.forEach {
             if (!missingSet.contains(it.playerKey)) {

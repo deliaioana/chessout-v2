@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Player
 
-class RoundAddPlayersDialog(
+class RoundAddAbsentPlayersDialog(
     val clubId: String,
     val tournamentId: String,
     val players: List<Player>

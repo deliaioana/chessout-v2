@@ -2,9 +2,7 @@ package eu.chessout.v2.ui.tournament.tournaments.rounds.players
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import eu.chessout.shared.Constants
@@ -46,6 +44,7 @@ class RoundAbsentPlayersFragment : Fragment() {
     ): View? {
         Log.d(Constants.LOG_TAG, "Debug round: $roundId")
         mView = inflater.inflate(R.layout.round_absent_players_fragment, container, false)
+        setHasOptionsMenu(true)
         viewModel.initialize(clubId, tournamentId)
         return mView
     }
@@ -57,6 +56,25 @@ class RoundAbsentPlayersFragment : Fragment() {
                 Constants.LOG_TAG,
                 "Total tournament players = ${viewModel.tournamentPlayers.size}"
             )
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.round_absent_players_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.addAbsentPlayers -> {
+                RoundAddAbsentPlayersDialog(
+                    viewModel.clubId,
+                    viewModel.tournamentId,
+                    viewModel.getPresentPlayers()
+                ).show(childFragmentManager, "RoundAddAbsentPlayersDialog")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
