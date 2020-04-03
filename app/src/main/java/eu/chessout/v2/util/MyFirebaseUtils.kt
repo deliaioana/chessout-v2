@@ -173,6 +173,36 @@ class MyFirebaseUtils {
         })
     }
 
+    fun awaitIsCurrentUserAdmin(clubKey: String?): Boolean {
+        val managers =
+            arrayOf(false) //first boolean holds the result
+        val uid =
+            FirebaseAuth.getInstance().currentUser!!.uid
+        val clubManagerLoc = Constants.LOCATION_CLUB_MANAGERS
+            .replace(Constants.CLUB_KEY, clubKey!!)
+            .replace(Constants.MANAGER_KEY, uid)
+        val managerRef =
+            FirebaseDatabase.getInstance().getReference(clubManagerLoc)
+        val isAdmin = arrayOf(false)
+        val latch = CountDownLatch(1)
+        val valueEventListener: ValueEventListener = object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    isAdmin[0] = true
+                }
+                latch.countDown()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                latch.countDown()
+            }
+        }
+        managerRef.addListenerForSingleValueEvent(valueEventListener)
+        latch.await()
+        return isAdmin[0]
+    }
+
 
     fun getClubPlayers(
         clubKey: String,
@@ -267,7 +297,7 @@ class MyFirebaseUtils {
         }
     }
 
-    fun suspendGetTournamentPlayers(tournamentId: String): List<Player> {
+    fun awaitGetTournamentPlayers(tournamentId: String): List<Player> {
         val playersLoc = Constants.LOCATION_TOURNAMENT_PLAYERS
             .replace(Constants.TOURNAMENT_KEY, tournamentId)
         val mReference =

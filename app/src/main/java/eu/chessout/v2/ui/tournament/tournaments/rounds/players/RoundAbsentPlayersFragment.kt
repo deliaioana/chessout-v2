@@ -57,7 +57,14 @@ class RoundAbsentPlayersFragment : Fragment() {
         mView = inflater.inflate(R.layout.round_absent_players_fragment, container, false)
         setHasOptionsMenu(true)
         viewModel.liveMissingPlayers.observe(viewLifecycleOwner, myObserver)
-        viewModel.initialize(clubId, tournamentId)
+        viewModel.isAdmin.observe(viewLifecycleOwner, Observer { admin ->
+            if (admin) {
+                fab.visibility = View.VISIBLE
+            } else {
+                fab.visibility = View.GONE
+            }
+        })
+        viewModel.initialize(clubId, tournamentId, roundId)
 
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
         myRecyclerView?.apply {

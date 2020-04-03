@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import eu.chessout.shared.model.Player
 import eu.chessout.v2.util.MyFirebaseUtils
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class RoundAbsentPlayersViewModel : ViewModel() {
     lateinit var clubId: String
@@ -13,19 +13,23 @@ class RoundAbsentPlayersViewModel : ViewModel() {
     var roundId: Int = -1
     val liveMissingPlayers = MutableLiveData<List<Player>>()
     var tournamentPlayers: List<Player> = ArrayList<Player>()
+    var isAdmin = MutableLiveData<Boolean>(false)
     var myFirebaseUtils = MyFirebaseUtils()
 
-    fun initialize(clubId: String, tournamentId: String) {
+    fun initialize(clubId: String, tournamentId: String, roundId: Int) {
         this.clubId = clubId
         this.tournamentId = tournamentId
+        this.roundId = roundId
 
-        GlobalScope.async {
-            tournamentPlayers = myFirebaseUtils.suspendGetTournamentPlayers(tournamentId)
+        GlobalScope.launch {
+            isAdmin.postValue(myFirebaseUtils.awaitIsCurrentUserAdmin(clubId))
+            tournamentPlayers = myFirebaseUtils.awaitGetTournamentPlayers(tournamentId)
         }
-        initMissingPlayer()
+
+        initMissingPlayers()
     }
 
-    private fun initMissingPlayer() {
+    private fun initMissingPlayers() {
         class PlayersListener : MyFirebaseUtils.PlayersListener {
             override fun listUpdated(players: List<Player>) {
                 liveMissingPlayers.value = players
@@ -35,6 +39,7 @@ class RoundAbsentPlayersViewModel : ViewModel() {
             tournamentId, roundId, false, PlayersListener()
         )
     }
+
 
     fun getPresentPlayers(): List<Player> {
         val map = LinkedHashMap<String, Player>()
