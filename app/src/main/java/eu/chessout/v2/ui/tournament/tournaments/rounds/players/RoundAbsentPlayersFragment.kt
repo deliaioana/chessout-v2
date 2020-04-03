@@ -70,6 +70,7 @@ class RoundAbsentPlayersFragment : Fragment() {
                 RoundAddAbsentPlayersDialog(
                     viewModel.clubId,
                     viewModel.tournamentId,
+                    viewModel.roundId,
                     viewModel.getPresentPlayers()
                 ).show(childFragmentManager, "RoundAddAbsentPlayersDialog")
                 true
