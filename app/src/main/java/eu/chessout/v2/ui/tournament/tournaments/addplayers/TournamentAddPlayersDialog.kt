@@ -19,6 +19,9 @@ import com.google.firebase.database.ValueEventListener
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Player
 import eu.chessout.v2.R
+import eu.chessout.v2.util.MyFirebaseUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 
 class TournamentAddPlayersDialog(
     val clubId: String,
@@ -82,12 +85,15 @@ class TournamentAddPlayersDialog(
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value == null) {
                     playerRef.setValue(player)
-                    /*MyCloudService.startActionRefreshTournamentInitialOrder(
-                        mContext,
-                        mClubKey,
-                        mUserKey,
-                        mTournamentKey
-                    )*/
+//                    MyCloudService.startActionRefreshTournamentInitialOrder(
+//                        mContext,
+//                        mClubKey,
+//                        mUserKey,
+//                        mTournamentKey
+//                    )
+                    GlobalScope.async {
+                        MyFirebaseUtils().refreshTournamentInitialOrder(clubId, tournamentId)
+                    }
                 }
                 dialog?.dismiss()
             }
