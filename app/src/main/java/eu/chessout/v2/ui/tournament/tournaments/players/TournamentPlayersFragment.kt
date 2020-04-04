@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import eu.chessout.shared.model.Player
+import eu.chessout.shared.model.RankedPlayer
 import eu.chessout.v2.R
 import eu.chessout.v2.ui.tournament.tournaments.addplayers.TournamentAddPlayersDialog
 import kotlinx.android.synthetic.main.tournament_players_fragment.*
@@ -20,7 +20,7 @@ class TournamentPlayersFragment() : Fragment() {
     private lateinit var viewModel: TournamentPlayersViewModel
     private val args: TournamentPlayersFragmentArgs by navArgs()
     private val myListAdapter = TournamentPlayersAdapter(arrayListOf())
-    private val myObserver = Observer<List<Player>> { list ->
+    private val myObserver = Observer<List<RankedPlayer>> { list ->
         list?.let {
             my_recycler_view.visibility = View.VISIBLE
             myListAdapter.updateList(it)
@@ -43,7 +43,7 @@ class TournamentPlayersFragment() : Fragment() {
                 fab.visibility = View.GONE
             }
         })
-        viewModel.livePlayerList.observe(viewLifecycleOwner, myObserver)
+        viewModel.liveRankedPlayer.observe(viewLifecycleOwner, myObserver)
         viewModel.initializeModel(args.clubId, args.tournamentId)
 
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)

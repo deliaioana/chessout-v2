@@ -40,6 +40,10 @@ class MyFirebaseUtils {
         fun listUpdated(players: List<Player>)
     }
 
+    interface RankedPlayerListener {
+        fun listUpdated(players: List<RankedPlayer>)
+    }
+
     fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
@@ -554,6 +558,46 @@ class MyFirebaseUtils {
             Comparator<RankedPlayer> { pa, pb -> pa.getTournamentInitialOrder() - pb.getTournamentInitialOrder() }
         playerList.sortWith(comparator)
         return playerList
+    }
+
+
+    fun observeTournamentInitialOrder(
+        singleValueEvent: Boolean,
+        tournamentKey: String,
+        rankedPlayerListener: RankedPlayerListener
+    ) {
+        val playerList: ArrayList<RankedPlayer> =
+            java.util.ArrayList<RankedPlayer>()
+        val playersLoc = Constants.LOCATION_TOURNAMENT_INITIAL_ORDER
+            .replace(Constants.TOURNAMENT_KEY, tournamentKey!!)
+        val playersRef =
+            FirebaseDatabase.getInstance().getReference(playersLoc)
+
+        val valueEventListener = object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                playerList.clear()
+                val it: Iterator<DataSnapshot> =
+                    dataSnapshot.children.iterator()
+                while (it.hasNext()) {
+                    val player: RankedPlayer? = it.next().getValue(RankedPlayer::class.java)
+                    playerList.add(player!!)
+                }
+                val comparator: Comparator<RankedPlayer> =
+                    Comparator<RankedPlayer> { pa, pb -> pa.getTournamentInitialOrder() - pb.getTournamentInitialOrder() }
+                playerList.sortWith(comparator)
+                rankedPlayerListener.listUpdated(playerList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(Constants.LOG_TAG, databaseError.message)
+            }
+        }
+        if (singleValueEvent) {
+            playersRef.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            playersRef.addValueEventListener(valueEventListener)
+        }
     }
 
     fun getTournamentPlayers(tournamentKey: String?): List<Player> {

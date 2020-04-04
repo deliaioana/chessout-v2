@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import eu.chessout.shared.model.Player
+import eu.chessout.shared.model.RankedPlayer
 import eu.chessout.v2.R
 
-class TournamentPlayersAdapter(var playerList: ArrayList<Player>) :
+class TournamentPlayersAdapter(var playerList: ArrayList<RankedPlayer>) :
     RecyclerView.Adapter<TournamentPlayersAdapter.ItemHolder>() {
 
 
@@ -27,11 +27,11 @@ class TournamentPlayersAdapter(var playerList: ArrayList<Player>) :
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        val player: Player = playerList[position]
-        holder.textView.text = player.name
+        val player: RankedPlayer = playerList[position]
+        holder.textView.text = player.playerName
     }
 
-    fun updateList(newList: List<Player>) {
+    fun updateList(newList: List<RankedPlayer>) {
         playerList.clear()
         playerList.addAll(newList)
         notifyDataSetChanged()

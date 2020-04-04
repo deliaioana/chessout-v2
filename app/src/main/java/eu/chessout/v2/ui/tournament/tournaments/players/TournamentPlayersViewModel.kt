@@ -3,6 +3,7 @@ package eu.chessout.v2.ui.tournament.tournaments.players
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import eu.chessout.shared.model.Player
+import eu.chessout.shared.model.RankedPlayer
 import eu.chessout.v2.util.MyFirebaseUtils
 
 class TournamentPlayersViewModel : ViewModel() {
@@ -10,6 +11,7 @@ class TournamentPlayersViewModel : ViewModel() {
     private var tournamentId = MutableLiveData<String>().apply { value = "" }
     var isAdmin = MutableLiveData(false)
     val livePlayerList = MutableLiveData<List<Player>>()
+    val liveRankedPlayer = MutableLiveData<List<RankedPlayer>>()
     val liveClubPlayerList = MutableLiveData<List<Player>>()
     val missingPlayers = MutableLiveData<List<Player>>()
 
@@ -21,6 +23,7 @@ class TournamentPlayersViewModel : ViewModel() {
         myFirebaseUtils = MyFirebaseUtils()
 
         initIsAdmin()
+        initRankedPlayers()
         initPlayers()
     }
 
@@ -32,6 +35,19 @@ class TournamentPlayersViewModel : ViewModel() {
             }
         }
         myFirebaseUtils.isCurrentUserAdmin(clubId.value, IsAdminListener())
+    }
+
+    private fun initRankedPlayers() {
+        class RankedPlayersListener : MyFirebaseUtils.RankedPlayerListener {
+            override fun listUpdated(players: List<RankedPlayer>) {
+                liveRankedPlayer.value = players
+            }
+        }
+        myFirebaseUtils.observeTournamentInitialOrder(
+            false,
+            tournamentId.value!!,
+            RankedPlayersListener()
+        )
     }
 
     fun getClubId(): String {
