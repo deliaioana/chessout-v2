@@ -174,6 +174,35 @@ class MyFirebaseUtils {
         })
     }
 
+    fun isCurrentUserAdmin(clubKey: String): Boolean {
+        val managers =
+            arrayOf(false) //first boolean holds the result
+        val uid =
+            FirebaseAuth.getInstance().currentUser!!.uid
+        val clubManagerLoc = Constants.LOCATION_CLUB_MANAGERS
+            .replace(Constants.CLUB_KEY, clubKey!!)
+            .replace(Constants.MANAGER_KEY, uid)
+        val managerRef =
+            FirebaseDatabase.getInstance().getReference(clubManagerLoc)
+        val latch = CountDownLatch(1)
+        val adminItem = arrayListOf(false)
+        managerRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    adminItem[0] = true
+                }
+                latch.countDown()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                latch.countDown()
+            }
+        })
+        latch.await()
+        return adminItem[0]
+    }
+
     fun awaitIsCurrentUserAdmin(clubKey: String?): Boolean {
         val managers =
             arrayOf(false) //first boolean holds the result
