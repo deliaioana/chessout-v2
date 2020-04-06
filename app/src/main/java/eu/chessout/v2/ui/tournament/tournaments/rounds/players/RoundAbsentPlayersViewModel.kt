@@ -20,7 +20,7 @@ class RoundAbsentPlayersViewModel : ViewModel() {
     fun initialize(clubId: String, tournamentId: String, roundId: Int) {
         this.clubId = clubId
         this.tournamentId = tournamentId
-        this.roundId = roundId + 1
+        this.roundId = roundId
 
         GlobalScope.launch {
             isAdmin.postValue(myFirebaseUtils.awaitIsCurrentUserAdmin(clubId))

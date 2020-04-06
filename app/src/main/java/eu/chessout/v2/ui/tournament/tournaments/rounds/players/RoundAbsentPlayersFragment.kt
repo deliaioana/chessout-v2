@@ -2,7 +2,10 @@ package eu.chessout.v2.ui.tournament.tournaments.rounds.players
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -92,7 +95,7 @@ class RoundAbsentPlayersFragment : Fragment() {
         fab.setOnClickListener { viewModel.generateGames() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.round_absent_players_menu, menu)
         mMenu = menu
         super.onCreateOptionsMenu(menu, inflater)
@@ -112,7 +115,7 @@ class RoundAbsentPlayersFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
+    }*/
 
     fun getPresentPlayers(): List<Player> {
         return viewModel.getPresentPlayers()

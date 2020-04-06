@@ -51,7 +51,8 @@ class RoundsPagerFragment : Fragment() {
         override fun getItemCount(): Int = args.totalRounds
 
         override fun createFragment(position: Int): Fragment {
-            val stateFragment = RoundStateFragment(args.clubId, args.tournamentId, position)
+            val roundId = position + 1;
+            val stateFragment = RoundStateFragment(args.clubId, args.tournamentId, roundId)
             stateFragments[position] = stateFragment
             return stateFragment
         }
@@ -70,10 +71,11 @@ class RoundsPagerFragment : Fragment() {
                 Log.d(Constants.LOG_TAG, "Present players for $position")
                 val players = stateFragments[viewModel.position.value!!]!!
                     .getPresentPlayers()
+                val roundId = viewModel.position.value!! + 1
                 RoundAddAbsentPlayersDialog(
                     args.clubId,
                     args.tournamentId,
-                    viewModel.position.value!!,
+                    roundId,
                     players
                 ).show(childFragmentManager, "RoundAddAbsentPlayersDialog")
                 true
