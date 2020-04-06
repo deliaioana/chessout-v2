@@ -48,6 +48,10 @@ class MyFirebaseUtils {
         fun listUpdated(players: List<RankedPlayer>)
     }
 
+    interface GamesListener {
+        fun listUpdated(games: List<Game>)
+    }
+
     fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
@@ -916,6 +920,36 @@ class MyFirebaseUtils {
             Log.e(Constants.LOG_TAG, "getFirstTableNumber " + e.message)
         }
         return numbers[0]
+    }
+
+
+    fun registerGamesListener(
+        singleValueEvent: Boolean,
+        tournamentId: String,
+        roundId: Int,
+        gamesListener: GamesListener
+    ) {
+        val valueEventListener = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                gamesListener.listUpdated(ArrayList())
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val newList = ArrayList<Game>()
+                for (item in p0.children) {
+                    val game = item.getValue(Game::class.java)
+                    newList.add(game!!)
+                }
+                gamesListener.listUpdated(newList)
+            }
+
+        }
+        val gamesReference = buildGamesRef(tournamentId, roundId)
+        if (singleValueEvent) {
+            gamesReference.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            gamesReference.addValueEventListener(valueEventListener)
+        }
     }
 
 }

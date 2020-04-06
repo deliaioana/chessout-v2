@@ -45,5 +45,4 @@ class RoundGamesFragment : Fragment() {
         return mView
     }
 
-
 }
