@@ -2,10 +2,7 @@ package eu.chessout.v2.util
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.gson.Gson
 import eu.chessdata.chesspairing.algoritms.fideswissduch.Algorithm
 import eu.chessdata.chesspairing.algoritms.javafo.JavafoWrapp
@@ -37,6 +34,10 @@ class MyFirebaseUtils {
 
     interface IsAdminListener {
         fun onIsAdmin(isAdmin: Boolean)
+    }
+
+    interface BoolListener {
+        fun boolValueChanged(newValue: Boolean)
     }
 
     interface PlayersListener {
@@ -600,6 +601,38 @@ class MyFirebaseUtils {
             playersRef.addListenerForSingleValueEvent(valueEventListener)
         } else {
             playersRef.addValueEventListener(valueEventListener)
+        }
+    }
+
+    private fun buildGamesRef(tournamentKey: String, roundId: Int): DatabaseReference {
+        val gamesLoc = Constants.LOCATION_ROUND_GAMES
+            .replace(Constants.TOURNAMENT_KEY, tournamentKey)
+            .replace(Constants.ROUND_NUMBER, roundId.toString())
+        return FirebaseDatabase.getInstance().getReference(gamesLoc)
+    }
+
+    fun observeRoundHasGames(
+        singleValueEvent: Boolean,
+        tournamentKey: String,
+        roundId: Int,
+        boolListener: BoolListener
+    ) {
+        val valueEventListener = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                boolListener.boolValueChanged(false)
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    boolListener.boolValueChanged(true)
+                }
+            }
+        }
+        val gamesRef = buildGamesRef(tournamentKey, roundId)
+        if (singleValueEvent) {
+            gamesRef.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            gamesRef.addValueEventListener(valueEventListener)
         }
     }
 

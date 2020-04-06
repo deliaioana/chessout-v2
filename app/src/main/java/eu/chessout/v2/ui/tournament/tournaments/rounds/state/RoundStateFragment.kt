@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import eu.chessout.shared.model.Player
 import eu.chessout.v2.R
 import eu.chessout.v2.ui.tournament.tournaments.rounds.players.RoundAbsentPlayersFragment
@@ -18,6 +19,7 @@ class RoundStateFragment(
 
     lateinit var mView: View
     private lateinit var absentPlayersFragment: RoundAbsentPlayersFragment
+    private lateinit var viewModel: RoundStateViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +42,9 @@ class RoundStateFragment(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         textView.text = "Round number $roundId"
+        val model: RoundStateViewModel by viewModels()
+        viewModel = model
+        viewModel.initialize(tournamentId, roundId)
     }
 
     fun getPresentPlayers(): List<Player> {
