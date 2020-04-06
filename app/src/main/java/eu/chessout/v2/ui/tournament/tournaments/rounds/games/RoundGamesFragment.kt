@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import eu.chessout.v2.R
 
 class RoundGamesFragment : Fragment() {
@@ -21,19 +21,29 @@ class RoundGamesFragment : Fragment() {
             }
     }
 
-    private lateinit var viewModel: RoundGamesViewModel
+    lateinit var clubId: String
+    lateinit var tournamentId: String
+    var roundId: Int = -1
+    private val viewModel: RoundGamesViewModel by viewModels()
+    lateinit var mView: View
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            clubId = requireArguments().getString("clubId")!!
+            tournamentId = requireArguments().getString("tournamentId")!!
+            roundId = requireArguments().getInt("roundId")!!
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.round_games_fragment, container, false)
+        mView = inflater.inflate(R.layout.round_games_fragment, container, false)
+        viewModel.initialize(clubId, tournamentId, roundId)
+        return mView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RoundGamesViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 }

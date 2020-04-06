@@ -57,7 +57,6 @@ class RoundAbsentPlayersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(Constants.LOG_TAG, "Debug round: $roundId")
         mView = inflater.inflate(R.layout.round_absent_players_fragment, container, false)
         //setHasOptionsMenu(true)
         viewModel.liveMissingPlayers.observe(viewLifecycleOwner, myObserver)
