@@ -39,7 +39,7 @@ class RoundStateFragment(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        textView.text = "Round number $roundId"
+        textView.text = "Round number ${roundId + 1}"
     }
 
     fun getPresentPlayers(): List<Player> {

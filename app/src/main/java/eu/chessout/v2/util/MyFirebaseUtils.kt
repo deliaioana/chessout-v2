@@ -6,6 +6,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
+import eu.chessdata.chesspairing.algoritms.fideswissduch.Algorithm
+import eu.chessdata.chesspairing.algoritms.javafo.JavafoWrapp
 import eu.chessdata.chesspairing.model.*
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.*
@@ -766,6 +769,120 @@ class MyFirebaseUtils {
             4 -> return ChesspairingResult.BYE
         }
         throw IllegalStateException("New result type. please convert: $result")
+    }
+
+    /**
+     * Handle action Baz in the provided background thread with the provided
+     * parameters.
+     */
+    public fun generateGamesForRound(
+        clubKey: String,
+        tournamentKey: String,
+        roundId: Int
+    ) {
+        if (!isCurrentUserAdmin(clubKey)) {
+            return
+        }
+
+
+        var tournament: ChesspairingTournament =
+            buildChessPairingTournament(clubKey, tournamentKey)
+        val algorithm: Algorithm = JavafoWrapp()
+
+        //<debug> collect tournament state
+        val gson = Gson()
+        val tournamentJson = gson.toJson(tournament)
+
+        //<end debug>
+        Log.d(Constants.LOG_TAG, "new_game = $tournamentJson")
+        tournament = algorithm.generateNextRound(tournament)
+        val rounds = tournament.rounds
+        val round = rounds[rounds.size - 1]
+        persistNewGames(clubKey, tournamentKey, round)
+        Log.d(
+            Constants.LOG_TAG,
+            "persistNewGames has bean initiated"
+        )
+    }
+
+    fun persistNewGames(
+        clubKey: String,
+        tournamentKey: String,
+        round: ChesspairingRound
+    ) {
+        val firstTableNumber: Int = getFirstTableNumber(clubKey, tournamentKey)
+        val tempList: List<Player> =
+            getTournamentPlayers(tournamentKey)
+        val playerMap: MutableMap<String, Player> =
+            HashMap()
+        for (player in tempList) {
+            playerMap[player.playerKey] = player
+        }
+
+        //copy the games data
+        val chesspairingGames = round.games
+        val games: MutableList<Game> = java.util.ArrayList()
+        for (chesspairingGame in chesspairingGames) {
+            val game = Game()
+            game.tableNumber = chesspairingGame.tableNumber
+            game.actualNumber = chesspairingGame.tableNumber + firstTableNumber - 1
+            game.whitePlayer = playerMap[chesspairingGame.whitePlayer.playerKey]
+            if (chesspairingGame.blackPlayer != null) {
+                //white player ad black player are present
+                game.blackPlayer = playerMap[chesspairingGame.blackPlayer.playerKey]
+            } else {
+                game.result = 4
+            }
+            games.add(game)
+        }
+        val roundNumber = round.roundNumber.toString()
+        val gamesLoc = Constants.LOCATION_ROUND_GAMES
+            .replace(Constants.TOURNAMENT_KEY, tournamentKey!!)
+            .replace(Constants.ROUND_NUMBER, roundNumber)
+        val allGamesRef =
+            FirebaseDatabase.getInstance().getReference(gamesLoc)
+        for (gameItem in games) {
+            val gameRef =
+                allGamesRef.ref.child(java.lang.String.valueOf(gameItem.tableNumber))
+            gameRef.setValue(gameItem)
+        }
+    }
+
+    private fun getFirstTableNumber(
+        clubKey: String,
+        tournamentKey: String
+    ): Int {
+        val numbers = intArrayOf(1) //first number holds the result
+        val latch = CountDownLatch(1)
+        val tournamentLoc = Constants.LOCATION_TOURNAMENTS
+            .replace(Constants.CLUB_KEY, clubKey)
+            .replace(Constants.TOURNAMENT_KEY, tournamentKey)
+        val tournamentRef =
+            FirebaseDatabase.getInstance().getReference(tournamentLoc)
+        tournamentRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    val tournament = dataSnapshot.getValue(Tournament::class.java)
+                    numbers[0] = tournament!!.firstTableNumber
+                }
+                latch.countDown()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(
+                    Constants.LOG_TAG,
+                    "getFirstTableNumber: " + databaseError.message
+                )
+                latch.countDown()
+            }
+        })
+        try {
+            latch.await()
+        } catch (e: InterruptedException) {
+            Log.e(Constants.LOG_TAG, "getFirstTableNumber " + e.message)
+        }
+        return numbers[0]
     }
 
 }

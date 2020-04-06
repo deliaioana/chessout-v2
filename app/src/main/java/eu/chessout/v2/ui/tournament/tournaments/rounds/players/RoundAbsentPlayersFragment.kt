@@ -89,6 +89,7 @@ class RoundAbsentPlayersFragment : Fragment() {
             val menuItem = mMenu.findItem(R.id.addAbsentPlayers)
             menuItem.isVisible = isFocused
         }
+        fab.setOnClickListener { viewModel.generateGames() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

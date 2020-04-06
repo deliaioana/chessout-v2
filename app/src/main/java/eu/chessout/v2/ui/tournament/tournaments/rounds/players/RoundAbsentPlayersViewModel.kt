@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import eu.chessout.shared.model.Player
 import eu.chessout.v2.util.MyFirebaseUtils
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class RoundAbsentPlayersViewModel : ViewModel() {
@@ -19,7 +20,7 @@ class RoundAbsentPlayersViewModel : ViewModel() {
     fun initialize(clubId: String, tournamentId: String, roundId: Int) {
         this.clubId = clubId
         this.tournamentId = tournamentId
-        this.roundId = roundId
+        this.roundId = roundId + 1
 
         GlobalScope.launch {
             isAdmin.postValue(myFirebaseUtils.awaitIsCurrentUserAdmin(clubId))
@@ -54,5 +55,14 @@ class RoundAbsentPlayersViewModel : ViewModel() {
             }
         }
         return presentPlayers
+    }
+
+    fun generateGames() {
+        if (roundId <= 0) {
+            throw IllegalStateException("Round not allowed to be smaller then 1")
+        }
+        GlobalScope.async {
+            myFirebaseUtils.generateGamesForRound(clubId, tournamentId, roundId)
+        }
     }
 }
