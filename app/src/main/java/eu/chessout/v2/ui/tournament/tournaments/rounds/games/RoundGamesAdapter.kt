@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.Game
 import eu.chessout.v2.R
@@ -14,6 +15,7 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
     private lateinit var clubId: String
     private lateinit var tournamentId: String
     private var roundId = -1
+    private lateinit var fragmentManager: FragmentManager
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView: TextView = itemView.findViewById(R.id.list_item_text_simple_view)
@@ -42,7 +44,10 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
         }
         holder.textView.text = sb.toString()
         holder.textView.setOnClickListener {
-
+            RoundSetGameResultDialog(clubId, tournamentId, roundId, model).show(
+                this.fragmentManager,
+                "RoundSetGameResultDialog"
+            )
         }
     }
 
@@ -72,5 +77,9 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
         this.clubId = clubId
         this.tournamentId = tournamentId
         this.roundId = roundId
+    }
+
+    fun setFragmentManger(fragmentManager: FragmentManager) {
+        this.fragmentManager = fragmentManager
     }
 }
