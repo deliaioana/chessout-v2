@@ -53,6 +53,7 @@ class RoundGamesFragment : Fragment() {
         mView = inflater.inflate(R.layout.round_games_fragment, container, false)
         viewModel.liveGames.observe(viewLifecycleOwner, myObserver)
         viewModel.initialize(clubId, tournamentId, roundId)
+        myListAdapter.setIds(clubId, tournamentId, roundId)
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
         myRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)

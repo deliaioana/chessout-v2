@@ -11,6 +11,9 @@ import eu.chessout.v2.R
 class RoundGamesAdapter(val gameList: ArrayList<Game>) :
     RecyclerView.Adapter<RoundGamesAdapter.ItemHolder>() {
 
+    private lateinit var clubId: String
+    private lateinit var tournamentId: String
+    private var roundId = -1
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView: TextView = itemView.findViewById(R.id.list_item_text_simple_view)
@@ -38,6 +41,9 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
             sb.append(blackPlayer.name.toString() + " ")
         }
         holder.textView.text = sb.toString()
+        holder.textView.setOnClickListener {
+
+        }
     }
 
     private fun formatResult(result: Int): String? {
@@ -60,5 +66,11 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
         gameList.clear()
         gameList.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    fun setIds(clubId: String, tournamentId: String, roundId: Int) {
+        this.clubId = clubId
+        this.tournamentId = tournamentId
+        this.roundId = roundId
     }
 }
