@@ -94,28 +94,6 @@ class RoundAbsentPlayersFragment : Fragment() {
         fab.setOnClickListener { viewModel.generateGames() }
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.round_absent_players_menu, menu)
-        mMenu = menu
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.addAbsentPlayers -> {
-                RoundAddAbsentPlayersDialog(
-                    viewModel.clubId,
-                    viewModel.tournamentId,
-                    viewModel.roundId,
-                    viewModel.getPresentPlayers()
-                ).show(childFragmentManager, "RoundAddAbsentPlayersDialog")
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }*/
-
     fun getPresentPlayers(): List<Player> {
         return viewModel.getPresentPlayers()
     }
