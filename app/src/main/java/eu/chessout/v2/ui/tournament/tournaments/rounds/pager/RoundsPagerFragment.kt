@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -22,6 +23,10 @@ class RoundsPagerFragment : Fragment() {
     private lateinit var mView: View
     lateinit var viewModel: RoundPagerViewModel
     val stateFragments = HashMap<Int, RoundStateFragment>()
+    lateinit var pagerAdapter: ScreenSlidePagerAdapter
+    private val myObserver = Observer<Int> {
+        pagerAdapter.updateCount(it)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,15 +34,20 @@ class RoundsPagerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mView = inflater.inflate(R.layout.rounds_pager_fragment, container, false)
+        setHasOptionsMenu(true)
         val model: RoundPagerViewModel by viewModels()
         viewModel = model
-        setHasOptionsMenu(true)
+        viewModel.visibleRoundsCount.observe(viewLifecycleOwner, myObserver)
+        viewModel.initializeModel(args.tournamentId, args.totalRounds)
         return mView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val pagerAdapter = ScreenSlidePagerAdapter(this.requireActivity())
+        pagerAdapter = ScreenSlidePagerAdapter(
+            this.requireActivity(),
+            viewModel.visibleRoundsCount.value!!.toInt()
+        )
         roundsPager.adapter = pagerAdapter
         roundsPager.setPageTransformer(ZoomOutPageTransformer())
         roundsPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -47,8 +57,15 @@ class RoundsPagerFragment : Fragment() {
         })
     }
 
-    private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = args.totalRounds
+    inner class ScreenSlidePagerAdapter(fa: FragmentActivity, private var countValue: Int) :
+        FragmentStateAdapter(fa) {
+
+        fun updateCount(newCount: Int) {
+            this.countValue = newCount
+            notifyDataSetChanged()
+        }
+
+        override fun getItemCount(): Int = countValue
 
         override fun createFragment(position: Int): Fragment {
             val roundId = position + 1;
@@ -57,6 +74,7 @@ class RoundsPagerFragment : Fragment() {
             return stateFragment
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.round_absent_players_menu, menu)

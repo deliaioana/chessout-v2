@@ -52,6 +52,10 @@ class MyFirebaseUtils {
         fun listUpdated(games: List<Game>)
     }
 
+    interface LongListener {
+        fun valueUpdated(value: Long)
+    }
+
     fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
@@ -812,7 +816,7 @@ class MyFirebaseUtils {
      * Handle action Baz in the provided background thread with the provided
      * parameters.
      */
-    public fun generateGamesForRound(
+    fun generateGamesForRound(
         clubKey: String,
         tournamentKey: String,
         roundId: Int
@@ -949,6 +953,77 @@ class MyFirebaseUtils {
             gamesReference.addListenerForSingleValueEvent(valueEventListener)
         } else {
             gamesReference.addValueEventListener(valueEventListener)
+        }
+    }
+
+
+    fun registerCompletedRoundsListener(
+        singleValueEvent: Boolean,
+        tournamentId: String,
+        totalRounds: Long,
+        longListener: LongListener
+    ) {
+        val sectionNotRequired =
+            "/" + Constants.ROUND_NUMBER + "/" + Constants.ROUND_ABSENT_PLAYERS
+        val roundsLoc = Constants.LOCATION_ROUND_ABSENT_PLAYERS
+            .replace(sectionNotRequired, "")
+            .replace(Constants.TOURNAMENT_KEY, tournamentId)
+        val roundsRef =
+            FirebaseDatabase.getInstance().getReference(roundsLoc)
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                // nothing to implement
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var roundsWithData = dataSnapshot.childrenCount
+                if (roundsWithData == 0L) {
+                    roundsWithData = 1
+                }
+                if (roundsWithData == totalRounds) {
+                    longListener.valueUpdated(totalRounds)
+                    return
+                }
+
+
+                if (!dataSnapshot.hasChild(roundsWithData.toString())) {
+                    longListener.valueUpdated(roundsWithData)
+                    return
+                }
+
+                // get the last round
+                val vipRound = dataSnapshot.child(roundsWithData.toString())
+                if (!vipRound.hasChild(Constants.GAMES)) {
+                    return
+                }
+                val vipGames =
+                    vipRound.child(Constants.GAMES)
+
+                if (roundsWithData < totalRounds) {
+                    var incrementRoundsWithData = true
+                    /**
+                     * iterate over games and if any results are 0 (not decided)
+                     * then break the loop and set
+                     * incrementRoundsWithData = false;
+                     */
+                    for (item in vipGames.children) {
+                        val game = item.getValue(Game::class.java)
+                        if (game!!.result === 0) {
+                            incrementRoundsWithData = false
+                            break
+                        }
+                    }
+                    if (incrementRoundsWithData) {
+                        longListener.valueUpdated(roundsWithData + 1)
+                    }
+                }
+            }
+        }
+        if (singleValueEvent) {
+            roundsRef.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            roundsRef.addValueEventListener(valueEventListener)
         }
     }
 
