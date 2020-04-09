@@ -4,12 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.model.RankedPlayer
 import eu.chessout.v2.R
 
 class TournamentPlayersAdapter(var playerList: ArrayList<RankedPlayer>) :
     RecyclerView.Adapter<TournamentPlayersAdapter.ItemHolder>() {
+
+    private lateinit var fragmentManager: FragmentManager
 
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,5 +38,9 @@ class TournamentPlayersAdapter(var playerList: ArrayList<RankedPlayer>) :
         playerList.clear()
         playerList.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    fun setFragmentManger(fragmentManager: FragmentManager) {
+        this.fragmentManager = fragmentManager
     }
 }
