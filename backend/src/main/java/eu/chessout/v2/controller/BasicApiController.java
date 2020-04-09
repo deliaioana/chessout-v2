@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import eu.chessout.shared.dao.BasicApiResponse;
 import eu.chessout.shared.model.MyPayLoad;
+import eu.chessout.v2.utils.MyAuth;
 
 // useful documentation: https://www.baeldung.com/spring-boot-json
 
@@ -49,6 +50,10 @@ public class BasicApiController {
                 + myPayLoad.getTournamentId() + ", "
                 + myPayLoad.getRoundId() + ", "
                 + myPayLoad.getTableId());
+
+        String accessToken = MyAuth.getAccessToken();
+        logger.info("Access token: " + accessToken);
+
         return "Greetings from gameResultUpdatedTask";
     }
 }
