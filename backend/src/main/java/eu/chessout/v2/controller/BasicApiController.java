@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import eu.chessout.shared.dao.BasicApiResponse;
+import eu.chessout.shared.model.Device;
 import eu.chessout.shared.model.Game;
 import eu.chessout.shared.model.MyPayLoad;
 import eu.chessout.shared.model.Player;
@@ -76,12 +77,11 @@ public class BasicApiController {
 
     private void computeDevicesAndNotify(Player player, Game game) {
         List<User> followers = RestFirebase.getFollowers(player.getPlayerKey());
-        ObjectMapper debugMaper = new ObjectMapper();
         for (User user : followers) {
-            try {
-                logger.info("User: " + debugMaper.writeValueAsString(user));
-            } catch (JsonProcessingException e) {
-                throw new IllegalStateException(e);
+            String userId = user.getUserKey();
+            List<Device> devices = RestFirebase.getUserDevices(userId);
+            for (Device device : devices) {
+                logger.info("Device id: " + device.getDeviceKey());
             }
         }
     }

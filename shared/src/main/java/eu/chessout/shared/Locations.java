@@ -12,4 +12,14 @@ public class Locations {
         return Constants.LOCATION_GLOBAL_FOLLOWERS_BY_PLAYER
                 .replace(Constants.PLAYER_KEY, playerId);
     }
+
+    public static String buildDevicesLocation(String userId) {
+        return Constants.LOCATION_MY_DEVICES
+                .replace(Constants.USER_KEY, userId);
+    }
+
+    public static String url(String location, String accessToken) {
+        return Constants.FIREBASE_URL + location
+                + ".json?access_token=" + accessToken;
+    }
 }
