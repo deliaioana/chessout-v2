@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 import eu.chessout.shared.dao.BasicApiResponse;
 import eu.chessout.shared.model.MyPayLoad;
 
@@ -18,6 +20,7 @@ import eu.chessout.shared.model.MyPayLoad;
 
 @RestController
 public class BasicApiController {
+    private static final Logger logger = Logger.getLogger(BasicApiController.class.getName());
 
     @PutMapping("/api/gameResultUpdated")
     public BasicApiResponse gameResultUpdated(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException {
@@ -42,6 +45,10 @@ public class BasicApiController {
         ObjectMapper objectMapper = new ObjectMapper();
         MyPayLoad myPayLoad = objectMapper.readValue(payLoadBody, MyPayLoad.class);
         System.out.println("Hello gameResultUpdatedTask");
+        logger.info("Decoded tournament id and round id and table id: "
+                + myPayLoad.getTournamentId() + ", "
+                + myPayLoad.getRoundId() + ", "
+                + myPayLoad.getTableId());
         return "Greetings from gameResultUpdatedTask";
     }
 }
