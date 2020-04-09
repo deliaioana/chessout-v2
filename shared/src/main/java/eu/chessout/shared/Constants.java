@@ -131,7 +131,7 @@ public class Constants {
     /**
      * Constants for Firebase URL
      */
-    public static final String FIREBASE_URL = "https://chess-data.firebaseio.com/";
+    public static final String FIREBASE_URL = "https://chess-out-v2.firebaseio.com/";
 
     /**
      * Constants for Firebase object properties

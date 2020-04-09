@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import eu.chessout.shared.dao.BasicApiResponse;
+import eu.chessout.shared.model.Game;
 import eu.chessout.shared.model.MyPayLoad;
-import eu.chessout.v2.utils.MyAuth;
+import eu.chessout.shared.model.Player;
+import eu.chessout.shared.model.User;
+import eu.chessout.v2.utils.RestFirebase;
 
 // useful documentation: https://www.baeldung.com/spring-boot-json
 
@@ -51,9 +55,34 @@ public class BasicApiController {
                 + myPayLoad.getRoundId() + ", "
                 + myPayLoad.getTableId());
 
-        String accessToken = MyAuth.getAccessToken();
-        logger.info("Access token: " + accessToken);
+        // get google access token
+        Game game = RestFirebase.getGame(
+                myPayLoad.getTournamentId(),
+                myPayLoad.getRoundId(),
+                myPayLoad.getTableId());
 
-        return "Greetings from gameResultUpdatedTask";
+
+        if (null != game.getWhitePlayer()) {
+            logger.info("white player:" + game.getWhitePlayer().toString());
+            computeDevicesAndNotify(game.getWhitePlayer(), game);
+        }
+        if (null != game.getBlackPlayer()) {
+            logger.info("black player: " + game.getBlackPlayer().toString());
+            computeDevicesAndNotify(game.getBlackPlayer(), game);
+        }
+
+        return "End of gameResultUpdatedTask";
+    }
+
+    private void computeDevicesAndNotify(Player player, Game game) {
+        List<User> followers = RestFirebase.getFollowers(player.getPlayerKey());
+        ObjectMapper debugMaper = new ObjectMapper();
+        for (User user : followers) {
+            try {
+                logger.info("User: " + debugMaper.writeValueAsString(user));
+            } catch (JsonProcessingException e) {
+                throw new IllegalStateException(e);
+            }
+        }
     }
 }
