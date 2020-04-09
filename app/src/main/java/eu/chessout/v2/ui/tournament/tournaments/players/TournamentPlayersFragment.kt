@@ -45,7 +45,6 @@ class TournamentPlayersFragment() : Fragment() {
         })
         viewModel.liveRankedPlayer.observe(viewLifecycleOwner, myObserver)
         viewModel.initializeModel(args.clubId, args.tournamentId)
-
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
         myRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)

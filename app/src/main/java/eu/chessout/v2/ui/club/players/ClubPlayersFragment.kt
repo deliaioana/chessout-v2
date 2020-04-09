@@ -46,7 +46,7 @@ class ClubPlayersFragment : Fragment() {
         })
         viewModel.livePlayerList.observe(viewLifecycleOwner, myObserver)
         viewModel.initializeModel()
-
+        myListAdapter.setFragmentManager(childFragmentManager)
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
         myRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
