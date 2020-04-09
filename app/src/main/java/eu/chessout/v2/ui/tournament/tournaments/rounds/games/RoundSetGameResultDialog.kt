@@ -8,7 +8,13 @@ import android.util.Log
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.database.FirebaseDatabase
 import eu.chessout.shared.Constants
+import eu.chessout.shared.dao.BasicApiResponse
 import eu.chessout.shared.model.Game
+import eu.chessout.shared.model.MyPayLoad
+import eu.chessout.v2.model.BasicApiService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 class RoundSetGameResultDialog(
     val clubId: String,
@@ -52,7 +58,28 @@ class RoundSetGameResultDialog(
                 FirebaseDatabase.getInstance().getReference(resultLoc)
             resultRef.setValue(result)
 
-            Log.d(Constants.LOG_TAG, "Update int = $result")
+            val myPayLoad = MyPayLoad()
+            myPayLoad.authToken = "pleaseImplement"
+            myPayLoad.event = MyPayLoad.Event.GAME_RESULT_UPDATED
+            myPayLoad.gameType = "standard"
+            myPayLoad.tournamentType = "standard"
+            myPayLoad.tournamentId = tournamentId
+            myPayLoad.roundId = roundId.toString()
+            myPayLoad.tableId = tableNumber.toString()
+
+            BasicApiService().gameResultUpdated(myPayLoad)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<BasicApiResponse>() {
+                    override fun onSuccess(value: BasicApiResponse?) {
+                        Log.d(Constants.LOG_TAG, "Success${value?.message}")
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        Log.e(Constants.LOG_TAG, "Error ${e?.message}")
+                    }
+                })
+
             return null
         }
     }

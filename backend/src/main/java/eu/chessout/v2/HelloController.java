@@ -87,7 +87,8 @@ public class HelloController {
     @PutMapping("/sendNotification")
     public BasicApiResponse sendNotificationToDevice(@RequestBody MyPayLoad myPayLoad) throws JsonProcessingException, FirebaseMessagingException {
 
-        String registrationToken = myPayLoad.getGameLocation();
+        // just for debug purposes put the device token in auth token
+        String registrationToken = myPayLoad.getAuthToken();
         Notification notification = Notification.builder().setTitle("My backend notification")
                 .setBody("Hello from backend body notification").build();
 
@@ -99,7 +100,6 @@ public class HelloController {
                 .putData("time", "2:45")
                 .setToken(registrationToken)
                 .build();
-
 
         String responseFirebase = FirebaseMessaging.getInstance().send(message);
 

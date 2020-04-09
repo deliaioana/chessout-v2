@@ -5,28 +5,18 @@ package eu.chessout.shared.model;
  */
 public class MyPayLoad {
 
+    public enum Event {GAME_RESULT_UPDATED}
+
     private Event event;
     private String authToken;
-    private String gameLocation;
-    private String tournamentLocation;
+    private String gameType;
+    private String tournamentType;
+    private String tournamentId;
+    private String roundId;
+    private String tableId;
 
-    public String getGameLocation() {
-        return gameLocation;
-    }
 
     //getters and setters
-
-    public void setGameLocation(String gameLocation) {
-        this.gameLocation = gameLocation;
-    }
-
-    public String getTournamentLocation() {
-        return tournamentLocation;
-    }
-
-    public void setTournamentLocation(String tournamentLocation) {
-        this.tournamentLocation = tournamentLocation;
-    }
 
     public String getAuthToken() {
         return authToken;
@@ -44,5 +34,43 @@ public class MyPayLoad {
         this.event = event;
     }
 
-    public enum Event {GAME_RESULT_UPDATED}
+    public String getTournamentId() {
+        return tournamentId;
+    }
+
+    public void setTournamentId(String tournamentId) {
+        this.tournamentId = tournamentId;
+    }
+
+    public String getRoundId() {
+        return roundId;
+    }
+
+    public void setRoundId(String roundId) {
+        this.roundId = roundId;
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
+    }
+
+    public String getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(String gameType) {
+        this.gameType = gameType;
+    }
+
+    public String getTournamentType() {
+        return tournamentType;
+    }
+
+    public void setTournamentType(String tournamentType) {
+        this.tournamentType = tournamentType;
+    }
 }

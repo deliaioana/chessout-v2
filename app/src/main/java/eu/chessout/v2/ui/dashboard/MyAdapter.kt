@@ -63,8 +63,9 @@ class MyAdapter(
             val myPayLoad = MyPayLoad()
             myPayLoad.authToken = "androidToken"
             myPayLoad.event = MyPayLoad.Event.GAME_RESULT_UPDATED
-            myPayLoad.gameLocation = "android game location"
-            myPayLoad.tournamentLocation = "android tournament location"
+            myPayLoad.gameType = "standard"
+            myPayLoad.tournamentType = "standard"
+
 
             BasicApiService().gameResultUpdated(myPayLoad)
                 .subscribeOn(Schedulers.newThread())
