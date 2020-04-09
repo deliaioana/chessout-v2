@@ -2,7 +2,6 @@ package eu.chessout.v2;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
@@ -103,8 +102,6 @@ public class HelloController {
 
         String responseFirebase = FirebaseMessaging.getInstance().send(message);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String stringPlayLoad = objectMapper.writeValueAsString(myPayLoad);
         BasicApiResponse response = BasicApiResponse.message(
                 responseFirebase + ". token = " + registrationToken);
         return response;

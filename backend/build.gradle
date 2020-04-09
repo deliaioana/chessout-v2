@@ -91,7 +91,7 @@ appengine {
         stopPreviousVersion = true  // default - stop the current version
         promote = true              // default - & make this the current version
         projectId = 'chess-out-v2'
-        version = 'v0-00-00'
+        version = 'v0-00-01'
     }
 
     run {

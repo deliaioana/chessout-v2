@@ -19,6 +19,7 @@ import eu.chessout.shared.Constants;
 import eu.chessout.shared.Locations;
 import eu.chessout.shared.model.Device;
 import eu.chessout.shared.model.Game;
+import eu.chessout.shared.model.Player;
 import eu.chessout.shared.model.User;
 
 public class RestFirebase {
@@ -67,6 +68,10 @@ public class RestFirebase {
         logger.info("chess-data-restFirebaseGetContent locationUrl=" + locationUrl);
         logger.info("chess-data-restFirebaseGetContent response=" + responseJson);
         return responseJson;
+    }
+
+    private void sendNotification(String deviceKey, Player player, Game game) {
+
     }
 
     public static Game getGame(String tournamentId, String roundId, String tableId) {
@@ -148,4 +153,6 @@ public class RestFirebase {
             throw new IllegalStateException(e);
         }
     }
+
+
 }
