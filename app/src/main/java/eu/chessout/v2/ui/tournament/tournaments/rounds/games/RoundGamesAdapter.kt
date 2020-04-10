@@ -1,10 +1,12 @@
 package eu.chessout.v2.ui.tournament.tournaments.rounds.games
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.chessout.shared.Constants
@@ -18,6 +20,7 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
     private lateinit var tournamentId: String
     private var roundId = -1
     private lateinit var fragmentManager: FragmentManager
+    lateinit var context: Context
     var isAdmin = false
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -47,17 +50,31 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
         }
         holder.textView.text = sb.toString()
         holder.textView.setOnClickListener {
-            if (isAdmin) {
-                if (model.result != 0) {
+            if (isAdmin && (null != model.blackPlayer)) {
+                if (model.result == 0) {
                     RoundSetGameResultDialog(clubId, tournamentId, roundId, model).show(
                         this.fragmentManager,
                         "RoundSetGameResultDialog"
                     )
+                } else {
+                    Toast.makeText(
+                        this.context,
+                        "Use long click if you intend to update results",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                Log.d(Constants.LOG_TAG, "Please use log click")
             } else {
                 Log.d(Constants.LOG_TAG, "You are not an admin")
             }
+        }
+        holder.textView.setOnLongClickListener {
+            if (isAdmin && (null != model.blackPlayer)) {
+                RoundSetGameResultDialog(clubId, tournamentId, roundId, model).show(
+                    this.fragmentManager,
+                    "RoundSetGameResultDialog"
+                )
+            }
+            true
         }
     }
 
@@ -92,4 +109,5 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
     fun setFragmentManger(fragmentManager: FragmentManager) {
         this.fragmentManager = fragmentManager
     }
+
 }

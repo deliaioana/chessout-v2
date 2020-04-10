@@ -55,6 +55,7 @@ class RoundGamesFragment : Fragment() {
         viewModel.initialize(clubId, tournamentId, roundId)
         myListAdapter.setIds(clubId, tournamentId, roundId)
         myListAdapter.setFragmentManger(childFragmentManager)
+        myListAdapter.context = requireContext()
         viewModel.isAdmin.observe(viewLifecycleOwner, Observer<Boolean> {
             myListAdapter.isAdmin = it;
         })
