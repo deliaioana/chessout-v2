@@ -1,11 +1,13 @@
 package eu.chessout.v2.ui.tournament.tournaments.rounds.games
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Game
 import eu.chessout.v2.R
 
@@ -16,6 +18,7 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
     private lateinit var tournamentId: String
     private var roundId = -1
     private lateinit var fragmentManager: FragmentManager
+    var isAdmin = false
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView: TextView = itemView.findViewById(R.id.list_item_text_simple_view)
@@ -44,10 +47,17 @@ class RoundGamesAdapter(val gameList: ArrayList<Game>) :
         }
         holder.textView.text = sb.toString()
         holder.textView.setOnClickListener {
-            RoundSetGameResultDialog(clubId, tournamentId, roundId, model).show(
-                this.fragmentManager,
-                "RoundSetGameResultDialog"
-            )
+            if (isAdmin) {
+                if (model.result != 0) {
+                    RoundSetGameResultDialog(clubId, tournamentId, roundId, model).show(
+                        this.fragmentManager,
+                        "RoundSetGameResultDialog"
+                    )
+                }
+                Log.d(Constants.LOG_TAG, "Please use log click")
+            } else {
+                Log.d(Constants.LOG_TAG, "You are not an admin")
+            }
         }
     }
 

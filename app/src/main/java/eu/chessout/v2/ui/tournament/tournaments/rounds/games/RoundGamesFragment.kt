@@ -55,6 +55,9 @@ class RoundGamesFragment : Fragment() {
         viewModel.initialize(clubId, tournamentId, roundId)
         myListAdapter.setIds(clubId, tournamentId, roundId)
         myListAdapter.setFragmentManger(childFragmentManager)
+        viewModel.isAdmin.observe(viewLifecycleOwner, Observer<Boolean> {
+            myListAdapter.isAdmin = it;
+        })
         val myRecyclerView = mView.findViewById<RecyclerView>(R.id.my_recycler_view)
         myRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
