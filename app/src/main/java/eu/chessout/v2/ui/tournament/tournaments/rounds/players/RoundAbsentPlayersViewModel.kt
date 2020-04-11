@@ -61,6 +61,7 @@ class RoundAbsentPlayersViewModel : ViewModel() {
         if (roundId <= 0) {
             throw IllegalStateException("Round not allowed to be smaller then 1")
         }
+        isAdmin.value = false
         GlobalScope.async {
             myFirebaseUtils.generateGamesForRound(clubId, tournamentId, roundId)
         }
