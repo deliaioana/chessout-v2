@@ -48,6 +48,8 @@ public class Constants {
     public static final String GLOBAL_FOLLOWERS = "globalFollowers";
     public static final String BY_PLAYER = "byPlayer";
     public static final String FOLLOWED_PLAYERS = "followedPlayers";
+    public static final String MEDIA = "media";
+    public static final String PLAYER_MEDIA = "playerMedia";
 
 
     //clubManagers/$clubKey/$managerKey
@@ -155,4 +157,7 @@ public class Constants {
 
     //crowd-tournaments/$tournamentKey
     //public static final String LOCATION_CROWD_TOURNAMENT = LOCATION_CROWD_TOURNAMENTS +"/"+TOURNAMENT_KEY;
+
+    // media/$clubKey/playerMedia/$playerKey
+    public static final String LOCATION_PLAYER_MEDIA = MEDIA + "/" + CLUB_KEY + "/" + PLAYER_MEDIA + "/" + PLAYER_KEY;
 }
