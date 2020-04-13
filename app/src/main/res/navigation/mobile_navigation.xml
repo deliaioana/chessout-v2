@@ -98,7 +98,11 @@
         android:id="@+id/clubPlayersFragment"
         android:name="eu.chessout.v2.ui.club.players.ClubPlayersFragment"
         android:label="Club players"
-        tools:layout="@layout/club_players_fragment" />
+        tools:layout="@layout/club_players_fragment">
+        <action
+            android:id="@+id/action_clubPlayersFragment_to_playerDashboardFragment"
+            app:destination="@id/playerDashboardFragment" />
+    </fragment>
     <fragment
         android:id="@+id/tournamentPlayersFragment"
         android:name="eu.chessout.v2.ui.tournament.tournaments.players.TournamentPlayersFragment"
@@ -123,5 +127,18 @@
         <argument
             android:name="totalRounds"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playerDashboardFragment"
+        android:name="eu.chessout.v2.ui.playerdashboard.PlayerDashboardFragment"
+        android:label="Player dashboard"
+        tools:layout="@layout/player_dashboard_fragment">
+        <argument
+            android:name="clubId"
+            app:argType="string" />
+        <argument
+            android:name="playerId"
+            app:argType="string" />
     </fragment>
 </navigation>
