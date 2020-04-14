@@ -16,10 +16,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
+import java.io.File
+import java.io.FileInputStream
 
 class PlayerDashboardFragment : Fragment() {
 
@@ -32,7 +36,7 @@ class PlayerDashboardFragment : Fragment() {
     lateinit var clubId: String
     lateinit var playerId: String
     private val viewModel: PlayerDashboardViewModel by viewModels()
-    private val storage = Firebase.storage
+    private val storage = FirebaseStorage.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,6 +111,11 @@ class PlayerDashboardFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             val imageUri = data!!.data
             Log.d(Constants.LOG_TAG, "imageUri: $imageUri")
+            val locPlayerMedia = Constants.LOCATION_PLAYER_MEDIA
+                .replace(Constants.CLUB_KEY, clubId)
+                .replace(Constants.PLAYER_KEY, playerId)+"/testImage"
+            val storageReference = storage.reference.child(locPlayerMedia)
+            val stream = FileInputStream(File(imageUri.toString()))
         }
     }
 }
