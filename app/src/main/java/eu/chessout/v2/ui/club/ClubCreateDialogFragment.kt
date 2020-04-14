@@ -24,8 +24,8 @@ class ClubCreateDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         super.onCreate(savedInstanceState)
-        val builder = AlertDialog.Builder(this!!.activity!!)
-        val inflater = this!!.activity!!.layoutInflater
+        val builder = AlertDialog.Builder(this.requireActivity())
+        val inflater = this.requireActivity().layoutInflater
 
         mView = inflater.inflate(R.layout.club_create_dialog, null)
         builder.setView(mView)

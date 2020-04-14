@@ -49,7 +49,9 @@ public class Constants {
     public static final String BY_PLAYER = "byPlayer";
     public static final String FOLLOWED_PLAYERS = "followedPlayers";
     public static final String MEDIA = "media";
-    public static final String PLAYER_MEDIA = "playerMedia";
+    public static final String PLAYER = "player";
+    public static final String CLUB = "club";
+    public static final String PROFILE_PICTURE = "profilePicture";
 
 
     //clubManagers/$clubKey/$managerKey
@@ -158,6 +160,12 @@ public class Constants {
     //crowd-tournaments/$tournamentKey
     //public static final String LOCATION_CROWD_TOURNAMENT = LOCATION_CROWD_TOURNAMENTS +"/"+TOURNAMENT_KEY;
 
-    // media/$clubKey/playerMedia/$playerKey
-    public static final String LOCATION_PLAYER_MEDIA = MEDIA + "/" + CLUB_KEY + "/" + PLAYER_MEDIA + "/" + PLAYER_KEY;
+    // media/club/$clubKey/player/$playerKey
+    public static final String LOCATION_PLAYER_MEDIA = MEDIA + "/" + CLUB + "/"
+            + CLUB_KEY + "/" + PLAYER + "/" + PLAYER_KEY;
+
+    // media/club/$clubKey/player/$playerKey/profilePicture
+    public static final String LOCATION_PLAYER_MEDIA_PROFILE_PICTURE = LOCATION_PLAYER_MEDIA +
+            "/" + PROFILE_PICTURE;
+
 }

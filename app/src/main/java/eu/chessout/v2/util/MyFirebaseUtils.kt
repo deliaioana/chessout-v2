@@ -1027,4 +1027,17 @@ class MyFirebaseUtils {
         }
     }
 
+    fun setDefaultPicture(clubId: String, playerId: String, pictureName: String): Picture {
+        val profilePictureRef = Constants.LOCATION_PLAYER_MEDIA_PROFILE_PICTURE
+            .replace(Constants.CLUB_KEY, clubId)
+            .replace(Constants.PLAYER_KEY, playerId)
+        val pictureUri = "$profilePictureRef/$pictureName";
+        val picture = Picture("defaultPicture", pictureUri)
+
+        val database = FirebaseDatabase.getInstance()
+        val defaultPictureRef = database.getReference(profilePictureRef)
+        defaultPictureRef.setValue(picture)
+        return picture
+    }
+
 }

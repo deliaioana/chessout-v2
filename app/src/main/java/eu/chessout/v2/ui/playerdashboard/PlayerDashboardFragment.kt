@@ -28,6 +28,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
+import java.util.*
 
 class PlayerDashboardFragment : Fragment() {
 
@@ -89,10 +90,9 @@ class PlayerDashboardFragment : Fragment() {
         viewModel.initModel(this.clubId, this.playerId)
     }
 
-    private fun isPermissionsAllowed(permisionKey: String): Boolean {
+    private fun isPermissionsAllowed(permissionKey: String): Boolean {
         val permission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(), permissionKey
         )
         return permission == PackageManager.PERMISSION_GRANTED
     }
@@ -159,43 +159,45 @@ class PlayerDashboardFragment : Fragment() {
                 }
             }
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == Activity.RESULT_OK) {
-                    viewModel.setDefaultPicture(result.uri)
+                    val imageUri = result.uri!!
+                    val backendDisabled = true
+                    if (backendDisabled) {
+                        viewModel.setCachePictureUri(imageUri);
+                        return
+                    }
+                    val cursor =
+                        requireContext().contentResolver.query(
+                            imageUri, null, null, null, null
+                        )!!
+                    val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    cursor.moveToFirst()
+                    val displayName = cursor.getString(nameIndex)!!
+
+
+                    val generatedName = UUID.randomUUID().toString() + getExtension(displayName);
+                    val locProfilePicture = Constants.LOCATION_PLAYER_MEDIA_PROFILE_PICTURE
+                        .replace(Constants.CLUB_KEY, clubId)
+                        .replace(Constants.PLAYER_KEY, playerId) + "/" + generatedName;
+
+                    val storageReference = storage.reference.child(locProfilePicture)
+                    //val stream = FileInputStream(File(imageUri.toString()))
+
+                    val metadata = storageMetadata {
+                        contentType = getContentType(displayName)
+                    }
+                    val uploadTask = storageReference.putFile(imageUri!!, metadata)
+                    viewModel.setDefaultPicture(uploadTask, generatedName)
+
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Log.e(Constants.LOG_TAG, "Crop error: ${result.error}")
                 }
             }
         }
-
-        if (resultCode == -100 /*Activity.RESULT_OK*/ && requestCode == IMAGE_PICK_CODE) {
-            val imageUri = data!!.data
-            Log.d(Constants.LOG_TAG, "imageUri: $imageUri")
-            val cursor =
-                requireContext().contentResolver.query(imageUri!!, null, null, null, null)!!
-            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            cursor.moveToFirst()
-            val displayName = cursor.getString(nameIndex)!!
-
-
-            val locPlayerMedia = Constants.LOCATION_PLAYER_MEDIA
-                .replace(Constants.CLUB_KEY, clubId)
-                .replace(Constants.PLAYER_KEY, playerId) + "/testImage"
-            val storageReference = storage.reference.child(locPlayerMedia)
-            //val stream = FileInputStream(File(imageUri.toString()))
-
-            val metadata = storageMetadata {
-                contentType = getContentType(displayName)
-            }
-            val uploadTask = storageReference.putFile(imageUri!!, metadata)
-            uploadTask.addOnProgressListener { taskSnapshot ->
-                val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
-                Log.d(Constants.LOG_TAG, "Upload is $progress% done")
-            }.addOnPausedListener {
-                println("Upload is paused")
-            }
-        }
     }
+
 
     private fun launchImageCrop(uri: Uri) {
         CropImage.activity(uri)
@@ -212,5 +214,10 @@ class PlayerDashboardFragment : Fragment() {
             return "image/jpeg"
         }
         throw IllegalStateException("Not supported content type")
+    }
+
+    private fun getExtension(displayName: String): String {
+        val items = displayName.split(".")
+        return items[1]
     }
 }
