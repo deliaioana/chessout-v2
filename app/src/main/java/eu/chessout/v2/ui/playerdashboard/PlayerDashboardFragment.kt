@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +16,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.ktx.storageMetadata
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
-import java.io.File
-import java.io.FileInputStream
 
 class PlayerDashboardFragment : Fragment() {
 
@@ -111,11 +108,39 @@ class PlayerDashboardFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             val imageUri = data!!.data
             Log.d(Constants.LOG_TAG, "imageUri: $imageUri")
+            val cursor =
+                requireContext().contentResolver.query(imageUri!!, null, null, null, null)!!
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            val displayName = cursor.getString(nameIndex)!!
+
+
             val locPlayerMedia = Constants.LOCATION_PLAYER_MEDIA
                 .replace(Constants.CLUB_KEY, clubId)
-                .replace(Constants.PLAYER_KEY, playerId)+"/testImage"
+                .replace(Constants.PLAYER_KEY, playerId) + "/testImage"
             val storageReference = storage.reference.child(locPlayerMedia)
-            val stream = FileInputStream(File(imageUri.toString()))
+            //val stream = FileInputStream(File(imageUri.toString()))
+
+            val metadata = storageMetadata {
+                contentType = getContentType(displayName)
+            }
+            val uploadTask = storageReference.putFile(imageUri!!, metadata)
+            uploadTask.addOnProgressListener { taskSnapshot ->
+                val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+                Log.d(Constants.LOG_TAG, "Upload is $progress% done")
+            }.addOnPausedListener {
+                println("Upload is paused")
+            }
         }
+    }
+
+    private fun getContentType(displayName: String): String {
+        val items = displayName.split(".")
+        val extension = items[1]
+        if (extension == "jpg") {
+            return "image/jpeg"
+        }
+        throw IllegalStateException("Not supported content type")
+
     }
 }
