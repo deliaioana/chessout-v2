@@ -78,4 +78,10 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
 
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // android-image-cropper
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 }
