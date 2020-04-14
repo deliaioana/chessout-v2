@@ -1,10 +1,16 @@
 package eu.chessout.v2.ui.playerdashboard
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.ktx.Firebase
@@ -23,6 +29,7 @@ class PlayerDashboardFragment : Fragment() {
     lateinit var playerId: String
     private val viewModel: PlayerDashboardViewModel by viewModels()
     private val storage = Firebase.storage
+    private val MY_REQUEST_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +50,44 @@ class PlayerDashboardFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         profilePicture.setOnClickListener {
-            Log.d(Constants.LOG_TAG, "ProfilePicture clicked")
+            if (askForPermissions()) {
+                Log.d(Constants.LOG_TAG, "Permission ok")
+            } else {
+                Log.d(Constants.LOG_TAG, "Permissions not ok")
+            }
         }
 
         viewModel.initModel()
+    }
+
+    fun isPermissionsAllowed(): Boolean {
+        val permission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        return permission == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun askForPermissions(): Boolean {
+        if (!isPermissionsAllowed()) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            ) {
+                Toast.makeText(
+                    requireContext(), "Permission denied by rationale",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requireActivity().requestPermissions(
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_REQUEST_CODE
+                    )
+                }
+            }
+            return false
+        }
+        return true
     }
 }
