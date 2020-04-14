@@ -22,11 +22,7 @@ class Dashboard02Fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_dashboard02, container, false)
-
-
-
-        return root
+        return inflater.inflate(R.layout.fragment_dashboard02, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
