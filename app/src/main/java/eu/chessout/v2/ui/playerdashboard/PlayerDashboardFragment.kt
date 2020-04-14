@@ -16,8 +16,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
 import com.theartofdev.edmodo.cropper.CropImage
@@ -71,17 +74,28 @@ class PlayerDashboardFragment : Fragment() {
             }
         }
 
-        viewModel.initModel()
+        viewModel.defaultPictureUri.observe(viewLifecycleOwner, Observer { stringUri ->
+            if (null == stringUri) {
+                imageViewProfile.visibility = View.GONE
+            }
+            stringUri?.let {
+                imageViewProfile.visibility = View.VISIBLE
+                Glide.with(requireContext())
+                    .load(stringUri.toUri())
+                    .into(imageViewProfile)
+            }
+        })
+
+        viewModel.initModel(this.clubId, this.playerId)
     }
 
-    private fun isPermissionsAllowed(permisionKey:String): Boolean {
+    private fun isPermissionsAllowed(permisionKey: String): Boolean {
         val permission = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
         return permission == PackageManager.PERMISSION_GRANTED
     }
-
 
 
     private fun askForPermissions(): Boolean {
@@ -147,7 +161,7 @@ class PlayerDashboardFragment : Fragment() {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == Activity.RESULT_OK) {
-                    setImage(result.uri)
+                    viewModel.setDefaultPicture(result.uri)
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Log.e(Constants.LOG_TAG, "Crop error: ${result.error}")
                 }
@@ -183,13 +197,10 @@ class PlayerDashboardFragment : Fragment() {
         }
     }
 
-    private fun setImage(uri: Uri) {
-        Log.d(Constants.LOG_TAG, "Time to use glide to show the image: $uri")
-    }
-
     private fun launchImageCrop(uri: Uri) {
         CropImage.activity(uri)
             .setGuidelines(CropImageView.Guidelines.ON)
+            .setAspectRatio(1080, 1080)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
             .start(requireContext(), this)
     }
@@ -201,6 +212,5 @@ class PlayerDashboardFragment : Fragment() {
             return "image/jpeg"
         }
         throw IllegalStateException("Not supported content type")
-
     }
 }
