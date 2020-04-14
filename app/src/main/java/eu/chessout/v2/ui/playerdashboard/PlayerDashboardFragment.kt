@@ -1,6 +1,8 @@
 package eu.chessout.v2.ui.playerdashboard
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -22,6 +24,8 @@ import kotlinx.android.synthetic.main.player_dashboard_fragment.*
 class PlayerDashboardFragment : Fragment() {
 
     companion object {
+        private const val PERMISSION_REQUEST_EXTERNAL_STORAGE_CODE = 1000
+        private const val IMAGE_PICK_CODE = 1001
         fun newInstance() = PlayerDashboardFragment()
     }
 
@@ -29,7 +33,7 @@ class PlayerDashboardFragment : Fragment() {
     lateinit var playerId: String
     private val viewModel: PlayerDashboardViewModel by viewModels()
     private val storage = Firebase.storage
-    private val MY_REQUEST_CODE = 100
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +55,20 @@ class PlayerDashboardFragment : Fragment() {
 
         profilePicture.setOnClickListener {
             if (askForPermissions()) {
-                Log.d(Constants.LOG_TAG, "Permission ok")
+                pickImageFromGallery()
             } else {
-                Log.d(Constants.LOG_TAG, "Permissions not ok")
+                Toast.makeText(
+                    requireContext(), "Permission denied by rationale",
+                    Toast.LENGTH_SHORT
+                ).show()
+
             }
         }
 
         viewModel.initModel()
     }
 
-    fun isPermissionsAllowed(): Boolean {
+    private fun isPermissionsAllowed(): Boolean {
         val permission = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE
@@ -68,26 +76,37 @@ class PlayerDashboardFragment : Fragment() {
         return permission == PackageManager.PERMISSION_GRANTED
     }
 
-    fun askForPermissions(): Boolean {
+    private fun askForPermissions(): Boolean {
         if (!isPermissionsAllowed()) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     requireActivity(),
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             ) {
-                Toast.makeText(
-                    requireContext(), "Permission denied by rationale",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Log.d(Constants.LOG_TAG, "Permissions not ok")
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requireActivity().requestPermissions(
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_REQUEST_CODE
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        PERMISSION_REQUEST_EXTERNAL_STORAGE_CODE
                     )
                 }
             }
             return false
         }
         return true
+    }
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            val imageUri = data!!.data
+            Log.d(Constants.LOG_TAG, "imageUri: $imageUri")
+        }
     }
 }
