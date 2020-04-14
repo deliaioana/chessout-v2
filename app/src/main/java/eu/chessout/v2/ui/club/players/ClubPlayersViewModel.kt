@@ -13,7 +13,7 @@ import eu.chessout.shared.model.Player
 import eu.chessout.v2.util.MyFirebaseUtils
 
 class ClubPlayersViewModel : ViewModel() {
-    private var clubKey = MutableLiveData<String>().apply { value = "" }
+    var clubKey = MutableLiveData<String>().apply { value = "" }
     private lateinit var myFirebaseUtils: MyFirebaseUtils
     var isAdmin = MutableLiveData<Boolean>(false)
     val livePlayerList = MutableLiveData<List<Player>>()

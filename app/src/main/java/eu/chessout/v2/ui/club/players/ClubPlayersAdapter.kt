@@ -14,6 +14,7 @@ class ClubPlayersAdapter(var playerList: ArrayList<Player>) :
     RecyclerView.Adapter<ClubPlayersAdapter.ItemHolder>() {
 
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var clubId: String
 
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView = itemView.findViewById<TextView>(R.id.list_item_text_simple_view)
@@ -36,7 +37,7 @@ class ClubPlayersAdapter(var playerList: ArrayList<Player>) :
             //FollowPlayerDialog(player).show(fragmentManager, "FollowPlayerDialog")
             val action =
                 ClubPlayersFragmentDirections.actionClubPlayersFragmentToPlayerDashboardFragment(
-                    "myClubId", player.playerKey
+                    clubId, player.playerKey
                 )
             holder.textView.findNavController().navigate(action)
         }
@@ -50,5 +51,11 @@ class ClubPlayersAdapter(var playerList: ArrayList<Player>) :
 
     fun setFragmentManager(fragmentManager: FragmentManager) {
         this.fragmentManager = fragmentManager
+    }
+
+    fun setClubId(clubId: String?) {
+        clubId?.let {
+            this.clubId = clubId
+        }
     }
 }

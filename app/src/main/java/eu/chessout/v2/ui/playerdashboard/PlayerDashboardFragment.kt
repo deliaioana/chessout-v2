@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
+import java.io.File
 import java.util.*
 
 class PlayerDashboardFragment : Fragment() {
@@ -163,21 +163,18 @@ class PlayerDashboardFragment : Fragment() {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == Activity.RESULT_OK) {
                     val imageUri = result.uri!!
-                    val backendDisabled = true
+                    val backendDisabled = false
                     if (backendDisabled) {
                         viewModel.setCachePictureUri(imageUri);
                         return
                     }
-                    val cursor =
-                        requireContext().contentResolver.query(
-                            imageUri, null, null, null, null
-                        )!!
-                    val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    cursor.moveToFirst()
-                    val displayName = cursor.getString(nameIndex)!!
 
+                    // second version to locate file
+                    val fileName = getFileName(imageUri)
+                    Log.d(Constants.LOG_TAG, "File name = $fileName")
+                    val croppedFile = File(requireContext().cacheDir, fileName)
 
-                    val generatedName = UUID.randomUUID().toString() + getExtension(displayName);
+                    val generatedName = UUID.randomUUID().toString() + "." + getExtension(fileName);
                     val locProfilePicture = Constants.LOCATION_PLAYER_MEDIA_PROFILE_PICTURE
                         .replace(Constants.CLUB_KEY, clubId)
                         .replace(Constants.PLAYER_KEY, playerId) + "/" + generatedName;
@@ -186,9 +183,9 @@ class PlayerDashboardFragment : Fragment() {
                     //val stream = FileInputStream(File(imageUri.toString()))
 
                     val metadata = storageMetadata {
-                        contentType = getContentType(displayName)
+                        contentType = getContentType(fileName)
                     }
-                    val uploadTask = storageReference.putFile(imageUri!!, metadata)
+                    val uploadTask = storageReference.putFile(croppedFile.toUri(), metadata)
                     viewModel.setDefaultPicture(uploadTask, generatedName)
 
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -219,5 +216,12 @@ class PlayerDashboardFragment : Fragment() {
     private fun getExtension(displayName: String): String {
         val items = displayName.split(".")
         return items[1]
+    }
+
+    private fun getFileName(uri: Uri): String {
+        val stringUri = uri.toString();
+        val items = stringUri.split("/")
+        val size = items.size
+        return items[size - 1]
     }
 }
