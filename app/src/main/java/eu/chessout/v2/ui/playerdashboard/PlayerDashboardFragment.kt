@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
@@ -19,8 +21,8 @@ class PlayerDashboardFragment : Fragment() {
 
     lateinit var clubId: String
     lateinit var playerId: String
-
     private val viewModel: PlayerDashboardViewModel by viewModels()
+    private val storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
