@@ -12,6 +12,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class PlayerDashboardViewModel : ViewModel() {
+
+    companion object {
+        private var showAdminToastValue = true
+    }
+
     private lateinit var clubId: String
     private lateinit var playerId: String
     val defaultPictureUri = MutableLiveData<String?>()
@@ -58,6 +63,13 @@ class PlayerDashboardViewModel : ViewModel() {
         myFirebaseUtils.registerDefaultPlayerPictureListener(
             false, clubId, playerId, PictureListener()
         )
+    }
 
+    fun showAdminToast(): Boolean {
+        return showAdminToastValue
+    }
+
+    fun disableAdminToast() {
+        showAdminToastValue = false
     }
 }

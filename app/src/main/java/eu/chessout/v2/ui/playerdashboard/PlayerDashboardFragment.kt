@@ -87,7 +87,18 @@ class PlayerDashboardFragment : Fragment() {
                 GlideApp.with(requireContext())
                     .load(storageReference)
                     .into(imageViewProfile)
+            }
+        })
 
+        viewModel.isAdmin.observe(viewLifecycleOwner, Observer {
+            val isAdmin = it
+            if (isAdmin && viewModel.showAdminToast()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Use long click on items to update there values",
+                    Toast.LENGTH_SHORT
+                ).show()
+                viewModel.disableAdminToast()
             }
         })
 
