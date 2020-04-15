@@ -8,11 +8,14 @@ import com.google.firebase.storage.UploadTask
 import eu.chessout.shared.Constants
 import eu.chessout.shared.model.Picture
 import eu.chessout.v2.util.MyFirebaseUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PlayerDashboardViewModel : ViewModel() {
     private lateinit var clubId: String
     private lateinit var playerId: String
     val defaultPictureUri = MutableLiveData<String?>()
+    val isAdmin = MutableLiveData<Boolean>(false)
     private val myFirebaseUtils = MyFirebaseUtils()
 
     fun initModel(clubId: String, playerId: String) {
@@ -20,6 +23,9 @@ class PlayerDashboardViewModel : ViewModel() {
         this.playerId = playerId
 
         registerPictureListener()
+        GlobalScope.launch {
+            isAdmin.postValue(myFirebaseUtils.isCurrentUserAdmin(clubId))
+        }
     }
 
     fun setDefaultPicture(uploadTask: UploadTask, pictureName: String) {

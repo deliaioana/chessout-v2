@@ -14,9 +14,13 @@ import eu.chessout.shared.model.DefaultClub
 import eu.chessout.v2.util.MyFirebaseUtils
 import kotlin.concurrent.thread
 
-val TAG = Constants.LOG_TAG
 
 class Dashboard02ViewModel : ViewModel() {
+
+    companion object{
+        private const val LOG_TAG = Constants.LOG_TAG
+    }
+
     private var dataInitialized = false
     private val _text = MutableLiveData<String>().apply {
         value = "This is detail 2 fragment"
@@ -66,7 +70,6 @@ class Dashboard02ViewModel : ViewModel() {
     private fun checkClubCreated() {
 
         // database references
-        Log.d(TAG, "Time to check club created")
         val database =
             FirebaseDatabase.getInstance()
         val uid =
