@@ -56,6 +56,10 @@ class MyFirebaseUtils {
         fun valueUpdated(value: Long)
     }
 
+    interface PictureListener {
+        fun valueUpdated(value: Picture)
+    }
+
     fun getDefaultClubSingleValueListener(
         listener: DefaultClubListener
     ) {
@@ -1027,18 +1031,53 @@ class MyFirebaseUtils {
         }
     }
 
-    fun setDefaultPicture(clubId: String, playerId: String, pictureName: String): Picture {
-        val profilePictureRef = Constants.LOCATION_PLAYER_MEDIA_PROFILE_PICTURE
+    private fun getProfilePictureRefString(clubId: String, playerId: String): String {
+        return Constants.LOCATION_PLAYER_MEDIA_PROFILE_PICTURE
             .replace(Constants.CLUB_KEY, clubId)
             .replace(Constants.PLAYER_KEY, playerId)
-        val pictureUri = "$profilePictureRef/$pictureName";
+    }
+
+    private fun getProfilePictureRef(clubId: String, playerId: String): DatabaseReference {
+        val refString = getProfilePictureRefString(clubId, playerId)
+        return FirebaseDatabase.getInstance().getReference(refString)
+    }
+
+    fun setDefaultPicture(clubId: String, playerId: String, pictureName: String): Picture {
+        val profilePictureRefString = getProfilePictureRefString(clubId, playerId)
+        val pictureUri = "$profilePictureRefString/$pictureName";
         val picture = Picture("defaultPicture", pictureUri)
 
-        val database = FirebaseDatabase.getInstance()
-        val defaultPictureRef = database.getReference(profilePictureRef)
+        val defaultPictureRef = getProfilePictureRef(clubId, playerId)
         defaultPictureRef.setValue(picture)
         return picture
     }
 
 
+    fun registerDefaultPlayerPictureListener(
+        singleValueEvent: Boolean,
+        clubId: String,
+        playerId: String,
+        pictureListener: PictureListener
+    ) {
+        val valueEventListener = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                // nothing to do
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value != null) {
+                    val defaultPicture = dataSnapshot.getValue(Picture::class.java)
+                    pictureListener.valueUpdated(defaultPicture!!)
+                }
+            }
+
+        }
+        val profilePictureRef = getProfilePictureRef(clubId, playerId)
+        if (singleValueEvent) {
+            profilePictureRef.addListenerForSingleValueEvent(valueEventListener)
+        } else {
+            profilePictureRef.addValueEventListener(valueEventListener)
+        }
+
+    }
 }

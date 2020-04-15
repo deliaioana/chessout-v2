@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.storage.UploadTask
 import eu.chessout.shared.Constants
+import eu.chessout.shared.model.Picture
 import eu.chessout.v2.util.MyFirebaseUtils
 
 class PlayerDashboardViewModel : ViewModel() {
@@ -17,6 +18,8 @@ class PlayerDashboardViewModel : ViewModel() {
     fun initModel(clubId: String, playerId: String) {
         this.clubId = clubId
         this.playerId = playerId
+
+        registerPictureListener()
     }
 
     fun setDefaultPicture(uploadTask: UploadTask, pictureName: String) {
@@ -41,4 +44,15 @@ class PlayerDashboardViewModel : ViewModel() {
         this.defaultPictureUri.value = picture.stringUri
     }
 
+    private fun registerPictureListener() {
+        class PictureListener : MyFirebaseUtils.PictureListener {
+            override fun valueUpdated(value: Picture) {
+                defaultPictureUri.value = value.pictureId
+            }
+        }
+        myFirebaseUtils.registerDefaultPlayerPictureListener(
+            false, clubId, playerId, PictureListener()
+        )
+
+    }
 }
