@@ -19,6 +19,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
 import com.theartofdev.edmodo.cropper.CropImage
@@ -63,7 +64,7 @@ class PlayerDashboardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        profilePicture.setOnClickListener {
+        updateProfilePicture.setOnClickListener {
             if (askForPermissions()) {
                 pickImageFromGallery()
             } else {
@@ -71,7 +72,6 @@ class PlayerDashboardFragment : Fragment() {
                     requireContext(), "Permission denied by rationale",
                     Toast.LENGTH_SHORT
                 ).show()
-
             }
         }
 
@@ -86,19 +86,16 @@ class PlayerDashboardFragment : Fragment() {
 
                 GlideApp.with(requireContext())
                     .load(storageReference)
+                    .apply(RequestOptions().circleCrop())
                     .into(imageViewProfile)
             }
         })
 
         viewModel.isAdmin.observe(viewLifecycleOwner, Observer {
-            val isAdmin = it
-            if (isAdmin && viewModel.showAdminToast()) {
-                Toast.makeText(
-                    requireContext(),
-                    "Use long click on items to update there values",
-                    Toast.LENGTH_SHORT
-                ).show()
-                viewModel.disableAdminToast()
+            if (it) {
+                updateProfilePicture.visibility = View.VISIBLE
+            } else {
+                updateProfilePicture.visibility = View.GONE
             }
         })
 

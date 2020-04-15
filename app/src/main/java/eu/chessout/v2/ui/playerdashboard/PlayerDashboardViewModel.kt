@@ -41,7 +41,6 @@ class PlayerDashboardViewModel : ViewModel() {
             println("Upload is paused")
         }.addOnCompleteListener {
             persisDefaultPicture(pictureName)
-
             Log.d(Constants.LOG_TAG, "Upload complete")
         }
     }
