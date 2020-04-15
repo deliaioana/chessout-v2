@@ -40,14 +40,13 @@ class PlayerDashboardViewModel : ViewModel() {
     }
 
     private fun persisDefaultPicture(pictureName: String) {
-        val picture = myFirebaseUtils.setDefaultPicture(clubId, playerId, pictureName)
-        this.defaultPictureUri.value = picture.stringUri
+        myFirebaseUtils.setDefaultPicture(clubId, playerId, pictureName)
     }
 
     private fun registerPictureListener() {
         class PictureListener : MyFirebaseUtils.PictureListener {
             override fun valueUpdated(value: Picture) {
-                defaultPictureUri.value = value.pictureId
+                defaultPictureUri.value = value.stringUri
             }
         }
         myFirebaseUtils.registerDefaultPlayerPictureListener(

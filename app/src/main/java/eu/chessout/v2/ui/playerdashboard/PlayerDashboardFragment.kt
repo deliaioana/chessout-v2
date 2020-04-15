@@ -19,13 +19,13 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import eu.chessout.shared.Constants
 import eu.chessout.v2.R
+import eu.chessout.v2.util.GlideApp
 import kotlinx.android.synthetic.main.player_dashboard_fragment.*
 import java.io.File
 import java.util.*
@@ -81,9 +81,13 @@ class PlayerDashboardFragment : Fragment() {
             }
             stringUri?.let {
                 imageViewProfile.visibility = View.VISIBLE
-                Glide.with(requireContext())
-                    .load(stringUri.toUri())
+
+                val storageReference = storage.reference.child(stringUri)
+
+                GlideApp.with(requireContext())
+                    .load(storageReference)
                     .into(imageViewProfile)
+
             }
         })
 
