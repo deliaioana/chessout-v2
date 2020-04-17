@@ -63,7 +63,7 @@ class PlayerDashboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        playerRing.visibility = View.GONE
         updateProfilePicture.setOnClickListener {
             if (askForPermissions()) {
                 pickImageFromGallery()
@@ -77,17 +77,18 @@ class PlayerDashboardFragment : Fragment() {
 
         viewModel.defaultPictureUri.observe(viewLifecycleOwner, Observer { stringUri ->
             if (null == stringUri) {
-                imageViewProfile.visibility = View.GONE
+                playerProfilePicture.visibility = View.GONE
             }
             stringUri?.let {
-                imageViewProfile.visibility = View.VISIBLE
+                playerProfilePicture.visibility = View.VISIBLE
 
                 val storageReference = storage.reference.child(stringUri)
-
+                playerRing.visibility = View.VISIBLE
                 GlideApp.with(requireContext())
                     .load(storageReference)
                     .apply(RequestOptions().circleCrop())
-                    .into(imageViewProfile)
+                    .placeholder(R.drawable.ic_user_alt_solid_gray)
+                    .into(playerProfilePicture)
             }
         })
 
